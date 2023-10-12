@@ -1,31 +1,37 @@
 package org.firstinspires.ftc.teamcode.subsystem.arm;
 
-import static org.firstinspires.ftc.teamcode.subsystem.arm.SubSys_Arm_Constants.Specs.EXTENSION_TICKS_PER_METER;
+import static org.firstinspires.ftc.teamcode.subsystem.arm.SubSys_Arm_Constants.Specs.EXTENSION_TICKS_PER_CENTIMETER;
 import static org.firstinspires.ftc.teamcode.subsystem.arm.SubSys_Arm_Constants.Specs.ROTATION_TICKS_PER_DEGREE;
-
-import android.text.method.Touch;
+import static org.firstinspires.ftc.teamcode.subsystem.arm.SubSys_Arm_Constants.Tuning.INTAKE_EXTEND_ROTATE_SOFT_LIMIT;
+import static org.firstinspires.ftc.teamcode.subsystem.arm.SubSys_Arm_Constants.Tuning.MAX_EXT_AT_INTAKE;
+import static org.firstinspires.ftc.teamcode.subsystem.arm.SubSys_Arm_Constants.Tuning.OUTER_EXTEND_LIMIT;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.TouchSensor;
+
 import org.firstinspires.ftc.teamcode.subsystem.arm.SubSys_Arm_Constants.MotorIds;
 public class SubSys_Arm extends SubsystemBase
 {
     private HardwareMap hwMap;
     private Motor rotateMotor;
     private Motor extendMotor;
-    private TouchSensor downTouch;
-    private TouchSensor upTouch;
+    private TouchSensor backTouch;
+    private TouchSensor frontTouch;
     private TouchSensor inTouch;
 
     public SubSys_Arm(HardwareMap hwMap) {
         this.hwMap = hwMap;
         rotateMotor = new Motor(hwMap, MotorIds.ROTATE);
         extendMotor = new Motor(hwMap, MotorIds.EXTEND);
-        downTouch = hwMap.get(TouchSensor.class, "downtouch");
-        upTouch = hwMap.get(TouchSensor.class, "uptouch");
-        inTouch = hwMap.get(TouchSensor.class, "inTouch");
+        backTouch = hwMap.get(TouchSensor.class, "downtouch");
+        frontTouch = hwMap.get(TouchSensor.class, "uptouch");
+        inTouch = hwMap.get(TouchSensor.class, "exttouch");
+
+        // Reset the values when init
+        resetExtensionPosition();
+        resetRotationPosition();
     }
 
     /**
@@ -33,10 +39,11 @@ public class SubSys_Arm extends SubsystemBase
      * @param power Percent (%) power to rotate at
      * */
     public void rotate(double power) {
-        if (upTouch.isPressed() && power > 0) {
-            rotateMotor.set(0); // Force NO OUTPUT DOWN
-        } else if (downTouch.isPressed() && power < 0){
-            rotateMotor.set(0); // Force NO OUTPUT UP
+        boolean frontLimit = frontTouch.isPressed() && power > 0;
+        boolean backLimit = backTouch.isPressed() && power < 0;
+        boolean intakeSoftLimit = getExtensionCentimeters() > MAX_EXT_AT_INTAKE && getRotationDegrees() > INTAKE_EXTEND_ROTATE_SOFT_LIMIT;
+        if (frontLimit || backLimit || intakeSoftLimit) {
+            rotateMotor.set(0); // FORCE NO OUTPUT
         } else {
             rotateMotor.set(power); // Run output
         }
@@ -46,8 +53,11 @@ public class SubSys_Arm extends SubsystemBase
      * Extends the arm at the specified power
      * @param power Percent (%) power to extend at
      * */
+
     public void extend(double power) {
-        if (inTouch.isPressed() && power < 0) {
+        boolean inLimit = inTouch.isPressed() && power < 0;
+        boolean outLimit = OUTER_EXTEND_LIMIT < getExtensionCentimeters() && power > 0;
+        if (inLimit || outLimit) {
             extendMotor.set(0); // Force NO OUTPUT IN
         } else {
             extendMotor.set(power); // Run output
@@ -64,12 +74,12 @@ public class SubSys_Arm extends SubsystemBase
     }
 
     /**
-     * Takes motor extension ticks and convert to meters
+     * Takes motor extension ticks and convert to centimeters
      * @param ticks Motor ticks
-     * @return Meters
+     * @return Centimeters
      * */
-    public double extendTicksToMeters(int ticks) {
-        return (ticks / EXTENSION_TICKS_PER_METER);
+    public double extendTicksToCentimeters(int ticks) {
+        return (ticks / EXTENSION_TICKS_PER_CENTIMETER);
     }
 
     /**
@@ -77,7 +87,7 @@ public class SubSys_Arm extends SubsystemBase
      * @return true if touching
      * */
     public boolean rotateAtBackLimit() {
-        return upTouch.isPressed();
+        return backTouch.isPressed();
     }
 
     /**
@@ -85,7 +95,7 @@ public class SubSys_Arm extends SubsystemBase
      * @return true if touching
      * */
     public boolean rotateAtFrontLimit() {
-        return downTouch.isPressed();
+        return frontTouch.isPressed();
     }
 
     /**
@@ -105,11 +115,27 @@ public class SubSys_Arm extends SubsystemBase
     }
 
     /**
-     * Gets the current position of the arm extension in meters
-     * @return Meters
+     * Gets the current position of the arm extension in centimeters
+     * @return Centimeters
      * */
-    public double getExtensionMeters() {
-        return extendTicksToMeters(extendMotor.getCurrentPosition());
+    public double getExtensionCentimeters() {
+        return extendTicksToCentimeters(extendMotor.getCurrentPosition());
+    }
+
+    /**
+     * Gets the current position of the arm extension in ticks
+     * @return Ticks
+     * */
+    public double getExtensionTicks() {
+        return extendMotor.getCurrentPosition();
+    }
+
+    /**
+     * Gets the current position of the arm rotation in ticks
+     * @return Ticks
+     * */
+    public double getRotationTicks() {
+        return rotateMotor.getCurrentPosition();
     }
 
     /**
@@ -130,6 +156,8 @@ public class SubSys_Arm extends SubsystemBase
 
     @Override
     public void periodic() {
+        if (frontTouch.isPressed() && getRotationDegrees() != 0) resetRotationPosition();
+        if (inTouch.isPressed() && getExtensionCentimeters() != 0) resetExtensionPosition();
     }
 
 }

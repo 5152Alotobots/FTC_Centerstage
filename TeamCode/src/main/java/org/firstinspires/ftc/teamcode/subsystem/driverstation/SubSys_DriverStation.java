@@ -1,9 +1,6 @@
 package org.firstinspires.ftc.teamcode.subsystem.driverstation;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
-import com.arcrobotics.ftclib.command.button.GamepadButton;
-import com.arcrobotics.ftclib.gamepad.GamepadEx;
-import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 public class SubSys_DriverStation extends SubsystemBase
@@ -21,6 +18,7 @@ public class SubSys_DriverStation extends SubsystemBase
 
     // CoDriver controller
     // public GamepadEx coDriverController = new GamepadEx(gamepad2);
+
 
     @Override
     public void periodic() {

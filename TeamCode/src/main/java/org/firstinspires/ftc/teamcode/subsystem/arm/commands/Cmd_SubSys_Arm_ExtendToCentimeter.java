@@ -9,24 +9,24 @@ import org.firstinspires.ftc.teamcode.subsystem.arm.SubSys_Arm_Constants.Extensi
 
 import java.util.function.DoubleSupplier;
 
-public class Cmd_SubSys_Arm_ExtendToMeter extends CommandBase
+public class Cmd_SubSys_Arm_ExtendToCentimeter extends CommandBase
 {
     @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
     private final SubSys_Arm subSysArm;
     private Telemetry telemetry;
-    private DoubleSupplier meters;
+    private DoubleSupplier centimeters;
 
     // PIDF
     private PIDFController extPid;
 
-    public Cmd_SubSys_Arm_ExtendToMeter(
+    public Cmd_SubSys_Arm_ExtendToCentimeter(
             SubSys_Arm subSysArm,
             Telemetry telemetry,
-            DoubleSupplier meters) {
+            DoubleSupplier centimeters) {
 
         this.subSysArm = subSysArm;
         this.telemetry = telemetry;
-        this.meters = meters;
+        this.centimeters = centimeters;
         addRequirements(subSysArm);
     }
 
@@ -38,10 +38,8 @@ public class Cmd_SubSys_Arm_ExtendToMeter extends CommandBase
                 ExtensionPIDF.kI,
                 ExtensionPIDF.kD,
                 ExtensionPIDF.kF);
-        extPid.setTolerance(0.01); // Meters
+        extPid.setTolerance(0.5); // centimeter
 
-        //TEMP FOR TESTING, REMOVE TO USE ABSOLUTE POSITION
-        subSysArm.resetExtensionPosition();
     }
 
     // Called once the command ends or is interrupted.
@@ -53,11 +51,13 @@ public class Cmd_SubSys_Arm_ExtendToMeter extends CommandBase
 
     @Override
     public void execute() {
-        extCmd = extPid.calculate(subSysArm.getRotationDegrees(), meters.getAsDouble());
+        extCmd = extPid.calculate(subSysArm.getExtensionCentimeters(), centimeters.getAsDouble());
         telemetry.addData("extCmd", extCmd);
-        telemetry.addData("armIsAtSetpoint", extPid.atSetPoint());
+        telemetry.addData("extCentimeter", subSysArm.getExtensionCentimeters());
+        telemetry.addData("extTicks", subSysArm.getExtensionTicks());
+        telemetry.addData("extSetpoint", extPid.atSetPoint());
 
-        subSysArm.rotate(extCmd);
+        subSysArm.extend(extCmd);
 
     }
 

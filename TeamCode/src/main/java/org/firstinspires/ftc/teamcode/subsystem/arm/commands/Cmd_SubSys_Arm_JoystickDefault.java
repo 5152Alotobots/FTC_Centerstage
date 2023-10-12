@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.subsystem.arm.commands;
 
 import com.arcrobotics.ftclib.command.CommandBase;
-import com.arcrobotics.ftclib.controller.PIDFController;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.subsystem.arm.SubSys_Arm;
@@ -30,7 +29,8 @@ public class Cmd_SubSys_Arm_JoystickDefault extends CommandBase
     }
 
     @Override
-    public void initialize() {}
+    public void initialize() {
+    }
 
     // Called once the command ends or is interrupted.
     @Override
@@ -44,6 +44,10 @@ public class Cmd_SubSys_Arm_JoystickDefault extends CommandBase
         subSysArm.extend(
                 extCmd.getAsDouble()
         );
+        telemetry.addData("extTicks", subSysArm.getExtensionTicks());
+        telemetry.addData("extCM", subSysArm.getExtensionCentimeters());
+        telemetry.addData("rotTicks", subSysArm.getRotationTicks());
+        telemetry.addData("rotDeg", subSysArm.getRotationDegrees());
     }
 
     // Returns true when the command should end.

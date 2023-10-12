@@ -1,19 +1,15 @@
 package org.firstinspires.ftc.teamcode.opmodes;
 
 import com.arcrobotics.ftclib.command.CommandOpMode;
-import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.subsystem.arm.SubSys_Arm;
 import org.firstinspires.ftc.teamcode.subsystem.arm.commands.Cmd_SubSys_Arm_JoystickDefault;
-import org.firstinspires.ftc.teamcode.subsystem.arm.commands.Cmd_SubSys_Arm_RotateToDegree;
+import org.firstinspires.ftc.teamcode.subsystem.arm.commands.Cmd_SubSys_Arm_RotateAndExtend;
 import org.firstinspires.ftc.teamcode.subsystem.drive.SubSys_Drive;
 import org.firstinspires.ftc.teamcode.subsystem.drive.commands.Cmd_SubSys_Drive_JoystickDefault;
-import org.firstinspires.ftc.teamcode.subsystem.drive.commands.Cmd_SubSys_Drive_JoystickRotateAroundRecognition;
-import org.firstinspires.ftc.teamcode.subsystem.drive.commands.Cmd_SubSys_Drive_PIDFTuning;
 import org.firstinspires.ftc.teamcode.subsystem.driverstation.SubSys_DriverStation;
 import org.firstinspires.ftc.teamcode.subsystem.gyro.SubSys_Gyro;
 import org.firstinspires.ftc.teamcode.subsystem.visionportal.SubSys_Visionportal;
@@ -66,14 +62,39 @@ public class Teleop extends CommandOpMode
                 )
         );
 
-
-    coDriverController.getGamepadButton(GamepadKeys.Button.B).whenHeld(
-            new Cmd_SubSys_Arm_RotateToDegree(
+    coDriverController.getGamepadButton(GamepadKeys.Button.A).whenPressed(
+            new Cmd_SubSys_Arm_RotateAndExtend(
                     subSysArm,
                     telemetry,
-                    () -> 35
-            ).withTimeout(2000)
+                    () -> 0,
+                    () -> 0
+            ).withTimeout(2500)
     );
+        coDriverController.getGamepadButton(GamepadKeys.Button.Y).whenPressed(
+                new Cmd_SubSys_Arm_RotateAndExtend(
+                        subSysArm,
+                        telemetry,
+                        () -> -45,
+                        () -> 50
+                ).withTimeout(3000)
+        );
+
+    /*
+        coDriverController.getGamepadButton(GamepadKeys.Button.B).whenHeld(
+                new Cmd_SubSys_Arm_RotateToDegree(
+                        subSysArm,
+                        telemetry,
+                        () -> -20
+                )
+        );
+
+        coDriverController.getGamepadButton(GamepadKeys.Button.Y).whenHeld(
+                new Cmd_SubSys_Arm_ExtendToCentimeter(
+                        subSysArm,
+                        telemetry,
+                        () -> 20
+                )
+        );
 
 
         /*
