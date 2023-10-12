@@ -1,9 +1,9 @@
 package org.firstinspires.ftc.teamcode.subsystem.drive;
 
+import static org.firstinspires.ftc.teamcode.subsystem.drive.SubSys_Drive_Constants.BACK_LEFT_LOCATION;
+import static org.firstinspires.ftc.teamcode.subsystem.drive.SubSys_Drive_Constants.BACK_RIGHT_LOCATION;
 import static org.firstinspires.ftc.teamcode.subsystem.drive.SubSys_Drive_Constants.FRONT_LEFT_LOCATION;
 import static org.firstinspires.ftc.teamcode.subsystem.drive.SubSys_Drive_Constants.FRONT_RIGHT_LOCATION;
-import static org.firstinspires.ftc.teamcode.subsystem.drive.SubSys_Drive_Constants.REAR_LEFT_LOCATION;
-import static org.firstinspires.ftc.teamcode.subsystem.drive.SubSys_Drive_Constants.REAR_RIGHT_LOCATION;
 import static org.firstinspires.ftc.teamcode.subsystem.drive.SubSys_Drive_Constants.Specs.TICKS_PER_METER;
 import static org.firstinspires.ftc.teamcode.subsystem.drive.SubSys_Drive_Constants.Tuning;
 import static org.firstinspires.ftc.teamcode.subsystem.drive.SubSys_Drive_Constants.startPose;
@@ -44,16 +44,16 @@ public class SubSys_Drive extends SubsystemBase
         // Create motors
         m_frontLeftMotor = new Motor(hwMap, MotorIds.FRONT_LEFT);
         m_frontRightMotor = new Motor(hwMap, MotorIds.FRONT_RIGHT);
-        m_rearLeftMotor = new Motor(hwMap, MotorIds.REAR_LEFT);
-        m_rearRightMotor = new Motor(hwMap, MotorIds.REAR_RIGHT);
+        m_rearLeftMotor = new Motor(hwMap, MotorIds.BACK_LEFT);
+        m_rearRightMotor = new Motor(hwMap, MotorIds.BACK_RIGHT);
 
         // Create MecanumDrive
         m_mecanum = new MecanumDrive(m_frontLeftMotor, m_frontRightMotor, m_rearLeftMotor, m_rearRightMotor);
 
         // Invert motors
-        m_frontLeftMotor.setInverted(true);
+        m_frontLeftMotor.setInverted(false);
         m_frontRightMotor.setInverted(true);
-        m_rearLeftMotor.setInverted(true);
+        m_rearLeftMotor.setInverted(false);
         m_frontRightMotor.setInverted(true);
         // Create gyrosubsys
         this.gyroSubSys = gyroSubSys;
@@ -69,7 +69,7 @@ public class SubSys_Drive extends SubsystemBase
         m_kinematics = new MecanumDriveKinematics
                 (
                         FRONT_LEFT_LOCATION, FRONT_RIGHT_LOCATION,
-                        REAR_LEFT_LOCATION, REAR_RIGHT_LOCATION
+                        BACK_LEFT_LOCATION, BACK_RIGHT_LOCATION
                 );
 
         m_odometry = new MecanumDriveOdometry

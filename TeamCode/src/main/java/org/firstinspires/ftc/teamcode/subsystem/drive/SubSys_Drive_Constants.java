@@ -10,15 +10,15 @@ public class SubSys_Drive_Constants
     {
         public static final String FRONT_LEFT = "frontLeftMotor";
         public static final String FRONT_RIGHT = "frontRightMotor";
-        public static final String REAR_LEFT = "rearLeftMotor";
-        public static final String REAR_RIGHT = "rearRightMotor";
+        public static final String BACK_LEFT = "backLeftMotor";
+        public static final String BACK_RIGHT = "backRightMotor";
     }
 
     // Locations of the wheels relative to the robot center. X forward/back Y left/right
     public static final Translation2d FRONT_LEFT_LOCATION = new Translation2d(0.134, 0.152);
     public static final Translation2d FRONT_RIGHT_LOCATION = new Translation2d(0.134, -0.152);
-    public static final Translation2d REAR_LEFT_LOCATION = new Translation2d(-0.134, 0.152);
-    public static final Translation2d REAR_RIGHT_LOCATION = new Translation2d(-0.134, -0.152);
+    public static final Translation2d BACK_LEFT_LOCATION = new Translation2d(-0.134, 0.152);
+    public static final Translation2d BACK_RIGHT_LOCATION = new Translation2d(-0.134, -0.152);
 
     // Start pose
     public static final Pose2d startPose = new Pose2d(0, 0, new Rotation2d());

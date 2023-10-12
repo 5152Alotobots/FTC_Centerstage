@@ -45,25 +45,25 @@ public class Cmd_SubSys_Drive_JoystickRotateAroundRecognition extends CommandBas
         // Create new PIDF controller with values in SubSys_Drive_Constants
         rotPid = new PIDFController(AngularPIDF.kP, AngularPIDF.kI, AngularPIDF.kD, AngularPIDF.kF);
         rotPid.setTolerance(1); // Degrees
+
     }
 
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {}
 
+
+    double rotCmd = 0; // Set rotCmd to zero, so it is not overwritten to zero every loop
+
     @Override
     public void execute() {
         // Get the best recognition from the pipeline
         Recognition bestRecognition = subSysVisionportal.subSysTensorflow.getBestRecognition(LARGEST);
-        double rotCmd = 0;
-        double lastNonZeroRotCmd = 0;
         // Calculate the rotation value
-        if (bestRecognition != null) {
+        if (bestRecognition != null && !rotPid.atSetPoint()) {
             rotCmd = rotPid.calculate(0, bestRecognition.estimateAngleToObject(AngleUnit.DEGREES));
-            lastNonZeroRotCmd = rotCmd;
-        } else {
-            rotCmd = lastNonZeroRotCmd;
         }
+
         subSysDrive.drive(
                 xCmd.getAsDouble(),
                 yCmd.getAsDouble(),
