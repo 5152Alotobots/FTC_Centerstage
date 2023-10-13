@@ -1,8 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmodes;
 
 import com.arcrobotics.ftclib.command.CommandOpMode;
-import com.arcrobotics.ftclib.gamepad.GamepadEx;
-import com.arcrobotics.ftclib.gamepad.GamepadKeys;
+import com.arcrobotics.ftclib.command.InstantCommand;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.subsystem.arm.SubSys_Arm;
@@ -20,57 +19,51 @@ import org.firstinspires.ftc.teamcode.subsystem.visionportal.tensorflow.SubSys_T
 public class Teleop extends CommandOpMode
 {
 
-    private SubSys_Gyro subSysGyro;
-    private SubSys_Drive subSysDrive;
     private SubSys_Tensorflow subSysTensorflow;
     private SubSys_Apriltag subSysApriltag;
     private SubSys_Visionportal subSysVisionportal;
-    private SubSys_Arm subSysArm;
-    private SubSys_DriverStation subSysDriverStation;
 
     @Override
     public void initialize() {
-        // MOVE TO SUBSYS_DRIVERSTAION
-        GamepadEx driverController = new GamepadEx(gamepad1);
-        GamepadEx coDriverController = new GamepadEx(gamepad2);
 
-
-        subSysDriverStation = new SubSys_DriverStation(gamepad1, gamepad2);
-        subSysGyro = new SubSys_Gyro(hardwareMap);
-        subSysDrive = new SubSys_Drive(subSysGyro, hardwareMap);
-        subSysArm = new SubSys_Arm(hardwareMap);
+        SubSys_DriverStation subSysDriverStation = new SubSys_DriverStation(gamepad1, gamepad2);
+        SubSys_Gyro subSysGyro = new SubSys_Gyro(hardwareMap);
+        SubSys_Drive subSysDrive = new SubSys_Drive(subSysGyro, hardwareMap);
+        SubSys_Arm subSysArm = new SubSys_Arm(hardwareMap);
         // subSysApriltag = new SubSys_Apriltag();
         // subSysTensorflow = new SubSys_Tensorflow();
         // subSysVisionportal = new SubSys_Visionportal(subSysTensorflow, subSysApriltag, hardwareMap);
         register(subSysDriverStation, subSysGyro, subSysDrive, subSysArm);
 
+        /* Default commands */
         subSysDrive.setDefaultCommand(
                 new Cmd_SubSys_Drive_JoystickDefault(
                         subSysDrive,
                         telemetry,
-                        driverController::getLeftX,
-                        driverController::getLeftY,
-                        driverController::getRightX,
+                        subSysDriverStation::getDriverLeftX,
+                        subSysDriverStation::getDriverLeftY,
+                        subSysDriverStation::getDriverRightX,
                         () -> true
                 ));
         subSysArm.setDefaultCommand(
                 new Cmd_SubSys_Arm_JoystickDefault(
                         subSysArm,
                         telemetry,
-                        coDriverController::getRightY,
-                        coDriverController::getLeftY
+                        subSysDriverStation::getCoDriverRightY,
+                        subSysDriverStation::getCoDriverLeftY
                 )
         );
 
-    coDriverController.getGamepadButton(GamepadKeys.Button.A).whenPressed(
+        /* Arm positions */
+        subSysDriverStation.armIntakePositionButton.whenPressed(
             new Cmd_SubSys_Arm_RotateAndExtend(
                     subSysArm,
                     telemetry,
                     () -> 0,
                     () -> 0
             ).withTimeout(2500)
-    );
-        coDriverController.getGamepadButton(GamepadKeys.Button.Y).whenPressed(
+        );
+        subSysDriverStation.armMidPositionButton.whenPressed(
                 new Cmd_SubSys_Arm_RotateAndExtend(
                         subSysArm,
                         telemetry,
@@ -78,34 +71,19 @@ public class Teleop extends CommandOpMode
                         () -> 50
                 ).withTimeout(3000)
         );
-
-    /*
-        coDriverController.getGamepadButton(GamepadKeys.Button.B).whenHeld(
-                new Cmd_SubSys_Arm_RotateToDegree(
+        subSysDriverStation.armHighPositionButton.whenPressed(
+                new Cmd_SubSys_Arm_RotateAndExtend(
                         subSysArm,
                         telemetry,
-                        () -> -20
-                )
+                        () -> -90,
+                        () -> 0
+                ).withTimeout(3000)
         );
 
-        coDriverController.getGamepadButton(GamepadKeys.Button.Y).whenHeld(
-                new Cmd_SubSys_Arm_ExtendToCentimeter(
-                        subSysArm,
-                        telemetry,
-                        () -> 20
-                )
+        /* Misc */
+        subSysDriverStation.resetGyroButton.whenPressed(
+                new InstantCommand(subSysGyro::resetYaw)
         );
-
-
-        /*
-        runPIDF.whenHeld(new Cmd_SubSys_Drive_JoystickRotateAroundRecognition(
-                subSysDrive,
-                subSysVisionportal,
-                () -> m_driverController.getLeftX(),
-                () -> m_driverController.getLeftY(),
-                () -> false
-        ));
-        */
     }
 
 }

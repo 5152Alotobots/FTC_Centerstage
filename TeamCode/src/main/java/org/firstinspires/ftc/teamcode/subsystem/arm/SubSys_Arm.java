@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.subsystem.arm;
 
 import static org.firstinspires.ftc.teamcode.subsystem.arm.SubSys_Arm_Constants.Specs.EXTENSION_TICKS_PER_CENTIMETER;
 import static org.firstinspires.ftc.teamcode.subsystem.arm.SubSys_Arm_Constants.Specs.ROTATION_TICKS_PER_DEGREE;
-import static org.firstinspires.ftc.teamcode.subsystem.arm.SubSys_Arm_Constants.Tuning.INTAKE_EXTEND_ROTATE_SOFT_LIMIT;
+import static org.firstinspires.ftc.teamcode.subsystem.arm.SubSys_Arm_Constants.Tuning.INTAKE_POS_SOFT_LIMIT;
 import static org.firstinspires.ftc.teamcode.subsystem.arm.SubSys_Arm_Constants.Tuning.MAX_EXT_AT_INTAKE;
 import static org.firstinspires.ftc.teamcode.subsystem.arm.SubSys_Arm_Constants.Tuning.OUTER_EXTEND_LIMIT;
 
@@ -14,15 +14,13 @@ import com.qualcomm.robotcore.hardware.TouchSensor;
 import org.firstinspires.ftc.teamcode.subsystem.arm.SubSys_Arm_Constants.MotorIds;
 public class SubSys_Arm extends SubsystemBase
 {
-    private HardwareMap hwMap;
-    private Motor rotateMotor;
-    private Motor extendMotor;
-    private TouchSensor backTouch;
-    private TouchSensor frontTouch;
-    private TouchSensor inTouch;
+    private final Motor rotateMotor;
+    private final Motor extendMotor;
+    private final TouchSensor backTouch;
+    private final TouchSensor frontTouch;
+    private final TouchSensor inTouch;
 
     public SubSys_Arm(HardwareMap hwMap) {
-        this.hwMap = hwMap;
         rotateMotor = new Motor(hwMap, MotorIds.ROTATE);
         extendMotor = new Motor(hwMap, MotorIds.EXTEND);
         backTouch = hwMap.get(TouchSensor.class, "downtouch");
@@ -39,9 +37,10 @@ public class SubSys_Arm extends SubsystemBase
      * @param power Percent (%) power to rotate at
      * */
     public void rotate(double power) {
-        boolean frontLimit = frontTouch.isPressed() && power > 0;
-        boolean backLimit = backTouch.isPressed() && power < 0;
-        boolean intakeSoftLimit = getExtensionCentimeters() > MAX_EXT_AT_INTAKE && getRotationDegrees() > INTAKE_EXTEND_ROTATE_SOFT_LIMIT;
+        boolean frontLimit = frontTouch.isPressed() && power > 0; // Don't go down if frontTouch is pressed, allow up
+        boolean backLimit = backTouch.isPressed() && power < 0; // Don't go up if backTouch is pressed, allow down
+        // Don't go down further IF extended further than MAX_EXT_AT_INTAKE and rotation is greater (further down) than INTAKE_POS_SOFT_LIMIT, allow up
+        boolean intakeSoftLimit = getExtensionCentimeters() > MAX_EXT_AT_INTAKE && getRotationDegrees() > INTAKE_POS_SOFT_LIMIT && power > 0;
         if (frontLimit || backLimit || intakeSoftLimit) {
             rotateMotor.set(0); // FORCE NO OUTPUT
         } else {
@@ -55,10 +54,11 @@ public class SubSys_Arm extends SubsystemBase
      * */
 
     public void extend(double power) {
-        boolean inLimit = inTouch.isPressed() && power < 0;
-        boolean outLimit = OUTER_EXTEND_LIMIT < getExtensionCentimeters() && power > 0;
-        if (inLimit || outLimit) {
-            extendMotor.set(0); // Force NO OUTPUT IN
+        boolean inLimit = inTouch.isPressed() && power < 0; // Don't go in if inTouch is pressed, allow out
+        boolean outLimit = OUTER_EXTEND_LIMIT < getExtensionCentimeters() && power > 0; // Don't go out if further than OUTER_EXTEND_LIMIT, allow in
+        boolean intakeSoftLimit = getRotationDegrees() > INTAKE_POS_SOFT_LIMIT && power > 0; // Don't go out if within soft limit, allow in
+        if (inLimit || outLimit || intakeSoftLimit) {
+            extendMotor.set(0); // Force NO OUTPUT
         } else {
             extendMotor.set(power); // Run output
         }
