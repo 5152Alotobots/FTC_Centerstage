@@ -11,6 +11,8 @@ import org.firstinspires.ftc.teamcode.subsystem.drive.SubSys_Drive;
 import org.firstinspires.ftc.teamcode.subsystem.drive.commands.Cmd_SubSys_Drive_JoystickDefault;
 import org.firstinspires.ftc.teamcode.subsystem.driverstation.SubSys_DriverStation;
 import org.firstinspires.ftc.teamcode.subsystem.gyro.SubSys_Gyro;
+import org.firstinspires.ftc.teamcode.subsystem.hand.SubSys_Hand;
+import org.firstinspires.ftc.teamcode.subsystem.hand.commands.Cmd_SubSys_Hand_JoystickDefault;
 import org.firstinspires.ftc.teamcode.subsystem.visionportal.SubSys_Visionportal;
 import org.firstinspires.ftc.teamcode.subsystem.visionportal.apriltag.SubSys_Apriltag;
 import org.firstinspires.ftc.teamcode.subsystem.visionportal.tensorflow.SubSys_Tensorflow;
@@ -18,7 +20,6 @@ import org.firstinspires.ftc.teamcode.subsystem.visionportal.tensorflow.SubSys_T
 @TeleOp(name="Teleop", group = "teleop")
 public class Teleop extends CommandOpMode
 {
-
     private SubSys_Tensorflow subSysTensorflow;
     private SubSys_Apriltag subSysApriltag;
     private SubSys_Visionportal subSysVisionportal;
@@ -30,10 +31,12 @@ public class Teleop extends CommandOpMode
         SubSys_Gyro subSysGyro = new SubSys_Gyro(hardwareMap);
         SubSys_Drive subSysDrive = new SubSys_Drive(subSysGyro, hardwareMap);
         SubSys_Arm subSysArm = new SubSys_Arm(hardwareMap);
+        SubSys_Hand subSysShuttle = new SubSys_Hand(hardwareMap);
+
         // subSysApriltag = new SubSys_Apriltag();
         // subSysTensorflow = new SubSys_Tensorflow();
         // subSysVisionportal = new SubSys_Visionportal(subSysTensorflow, subSysApriltag, hardwareMap);
-        register(subSysDriverStation, subSysGyro, subSysDrive, subSysArm);
+        register(subSysDriverStation, subSysGyro, subSysDrive, subSysArm, subSysShuttle);
 
         /* Default commands */
         subSysDrive.setDefaultCommand(
@@ -84,6 +87,15 @@ public class Teleop extends CommandOpMode
         subSysDriverStation.resetGyroButton.whenPressed(
                 new InstantCommand(subSysGyro::resetYaw)
         );
+        subSysShuttle.setDefaultCommand(
+                new Cmd_SubSys_Hand_JoystickDefault(
+                        subSysShuttle,
+                        telemetry,
+                        () -> false,
+                        () -> false
+                )
+        );
+
     }
 
 }

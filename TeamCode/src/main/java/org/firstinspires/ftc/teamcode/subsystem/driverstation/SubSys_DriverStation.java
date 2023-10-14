@@ -19,6 +19,7 @@ public class SubSys_DriverStation extends SubsystemBase
     public final GamepadButton armIntakePositionButton;
     public final GamepadButton armMidPositionButton;
     public final GamepadButton armHighPositionButton;
+    public final GamepadButton wristButton;
 
 
     public SubSys_DriverStation(Gamepad gamepad1, Gamepad gamepad2) {
@@ -34,6 +35,7 @@ public class SubSys_DriverStation extends SubsystemBase
         armIntakePositionButton = new GamepadButton(coDriverController, GamepadKeys.Button.A);
         armMidPositionButton = new GamepadButton(coDriverController, GamepadKeys.Button.B);
         armHighPositionButton = new GamepadButton(coDriverController, GamepadKeys.Button.Y);
+        wristButton = new GamepadButton(coDriverController, GamepadKeys.Button.X);
     }
 
     /* Driver controller */
