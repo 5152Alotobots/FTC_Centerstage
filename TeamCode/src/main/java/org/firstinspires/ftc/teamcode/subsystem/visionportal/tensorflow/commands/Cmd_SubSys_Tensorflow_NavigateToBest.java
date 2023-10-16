@@ -12,8 +12,8 @@ import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 
 public class Cmd_SubSys_Tensorflow_NavigateToBest extends CommandBase
 {
-    private SubSys_Visionportal visionportal;
-    private SubSys_Tensorflow tensorflow;
+    private SubSys_Visionportal subSysVisionportal;
+    private SubSys_Tensorflow subSysTensorflow;
     private TfodProcessor processor;
     private int orderMode;
 
@@ -22,15 +22,15 @@ public class Cmd_SubSys_Tensorflow_NavigateToBest extends CommandBase
     private PIDFController yPid;
     private PIDFController rotPid;
 
-    public Cmd_SubSys_Tensorflow_NavigateToBest(SubSys_Visionportal visionportal, int orderMode) {
-        this.visionportal = visionportal;
-        this.tensorflow = visionportal.subSysTensorflow;
+    public Cmd_SubSys_Tensorflow_NavigateToBest(SubSys_Visionportal subSysVisionportal, SubSys_Tensorflow subSysTensorflow, int orderMode) {
+        this.subSysVisionportal = subSysVisionportal;
+        this.subSysTensorflow = subSysTensorflow;
         this.orderMode = orderMode;
-        addRequirements(visionportal);
+        addRequirements(subSysVisionportal, subSysTensorflow);
     }
     @Override
     public void initialize() {
-        processor = visionportal.subSysTensorflow.getProcessor();
+        processor = subSysTensorflow.getProcessor();
         xPid = new PIDFController(PIDF.kP, PIDF.kI, PIDF.kD, PIDF.kF);
         yPid = new PIDFController(PIDF.kP, PIDF.kI, PIDF.kD, PIDF.kF);
         rotPid = new PIDFController(AngularPIDF.kP, AngularPIDF.kI, AngularPIDF.kD, AngularPIDF.kF);
@@ -47,8 +47,8 @@ public class Cmd_SubSys_Tensorflow_NavigateToBest extends CommandBase
 
     @Override
     public void execute() {
-        Recognition bestRecognition = tensorflow.getBestRecognition(orderMode);
-        xPid.setSetPoint(tensorflow.getCenter(bestRecognition)[0]); // Set set point of xPid
+        Recognition bestRecognition = subSysTensorflow.getBestRecognition(orderMode);
+        xPid.setSetPoint(subSysTensorflow.getCenter(bestRecognition)[0]); // Set set point of xPid
 
 
 

@@ -9,7 +9,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.teamcode.subsystem.drive.SubSys_Drive;
 import org.firstinspires.ftc.teamcode.subsystem.drive.SubSys_Drive_Constants.AngularPIDF;
-import org.firstinspires.ftc.teamcode.subsystem.visionportal.SubSys_Visionportal;
+import org.firstinspires.ftc.teamcode.subsystem.visionportal.tensorflow.SubSys_Tensorflow;
 
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
@@ -18,7 +18,7 @@ public class Cmd_SubSys_Drive_JoystickRotateAroundRecognition extends CommandBas
 {
     @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
     private final SubSys_Drive subSysDrive;
-    private final SubSys_Visionportal subSysVisionportal;
+    private final SubSys_Tensorflow subSysTensorflow;
     private final DoubleSupplier xCmd;
     private final DoubleSupplier yCmd;
     private final BooleanSupplier fieldOriented;
@@ -28,17 +28,17 @@ public class Cmd_SubSys_Drive_JoystickRotateAroundRecognition extends CommandBas
 
     public Cmd_SubSys_Drive_JoystickRotateAroundRecognition(
             SubSys_Drive subSysDrive,
-            SubSys_Visionportal subSysVisionportal,
+            SubSys_Tensorflow subSysTensorflow,
             DoubleSupplier xCmd,
             DoubleSupplier yCmd,
             BooleanSupplier fieldOriented) {
 
         this.subSysDrive = subSysDrive;
-        this.subSysVisionportal =subSysVisionportal;
+        this.subSysTensorflow = subSysTensorflow;
         this.xCmd = xCmd;
         this.yCmd = yCmd;
         this.fieldOriented = fieldOriented;
-        addRequirements(subSysDrive, subSysVisionportal);
+        addRequirements(subSysDrive, subSysTensorflow);
     }
     @Override
     public void initialize() {
@@ -58,7 +58,7 @@ public class Cmd_SubSys_Drive_JoystickRotateAroundRecognition extends CommandBas
     @Override
     public void execute() {
         // Get the best recognition from the pipeline
-        Recognition bestRecognition = subSysVisionportal.subSysTensorflow.getBestRecognition(LARGEST);
+        Recognition bestRecognition = subSysTensorflow.getBestRecognition(LARGEST);
         // Calculate the rotation value
         if (bestRecognition != null && !rotPid.atSetPoint()) {
             rotCmd = rotPid.calculate(0, bestRecognition.estimateAngleToObject(AngleUnit.DEGREES));
