@@ -52,7 +52,7 @@ public class Teleop extends CommandOpMode
                 new Cmd_SubSys_Arm_JoystickDefault(
                         subSysArm,
                         telemetry,
-                        subSysDriverStation::getCoDriverRightY,
+                        () -> -subSysDriverStation.getCoDriverRightY(),
                         subSysDriverStation::getCoDriverLeftY
                 )
         );
@@ -70,7 +70,7 @@ public class Teleop extends CommandOpMode
                 new Cmd_SubSys_Arm_RotateAndExtend(
                         subSysArm,
                         telemetry,
-                        () -> -45,
+                        () -> 45,
                         () -> 50
                 ).withTimeout(3000)
         );
@@ -78,7 +78,7 @@ public class Teleop extends CommandOpMode
                 new Cmd_SubSys_Arm_RotateAndExtend(
                         subSysArm,
                         telemetry,
-                        () -> -90,
+                        () -> 90,
                         () -> 0
                 ).withTimeout(3000)
         );
