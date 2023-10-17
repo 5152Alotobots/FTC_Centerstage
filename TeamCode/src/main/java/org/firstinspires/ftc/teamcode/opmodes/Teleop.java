@@ -98,4 +98,19 @@ public class Teleop extends CommandOpMode
 
     }
 
+    @Override
+    public void runOpMode() throws InterruptedException {
+        initialize();
+
+        waitForStart();
+
+        // run the scheduler, update telemetry
+        while (!isStopRequested() && opModeIsActive()) {
+            run();
+            telemetry.update();
+        }
+        reset();
+    }
+
+
 }

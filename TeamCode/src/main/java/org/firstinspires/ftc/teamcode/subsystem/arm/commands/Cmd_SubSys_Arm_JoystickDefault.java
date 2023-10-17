@@ -1,10 +1,12 @@
 package org.firstinspires.ftc.teamcode.subsystem.arm.commands;
 
 import com.arcrobotics.ftclib.command.CommandBase;
+import com.github.freva.asciitable.AsciiTable;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.subsystem.arm.SubSys_Arm;
 
+import java.text.DecimalFormat;
 import java.util.function.DoubleSupplier;
 
 public class Cmd_SubSys_Arm_JoystickDefault extends CommandBase
@@ -14,6 +16,7 @@ public class Cmd_SubSys_Arm_JoystickDefault extends CommandBase
     private Telemetry telemetry;
     private DoubleSupplier rotCmd;
     private DoubleSupplier extCmd;
+    private final DecimalFormat round;
 
     public Cmd_SubSys_Arm_JoystickDefault(
             SubSys_Arm subSysArm,
@@ -26,6 +29,9 @@ public class Cmd_SubSys_Arm_JoystickDefault extends CommandBase
         this.rotCmd = rotCmd;
         this.extCmd = extCmd;
         addRequirements(subSysArm);
+
+        // round to TWO decimal places
+        round = new DecimalFormat("0.00");
     }
 
     @Override
@@ -39,15 +45,24 @@ public class Cmd_SubSys_Arm_JoystickDefault extends CommandBase
     @Override
     public void execute() {
         subSysArm.rotate(
-                -rotCmd.getAsDouble()
+                -rotCmd.getAsDouble() // Inverse so controls are push up to go down, back to go up
         );
         subSysArm.extend(
                 extCmd.getAsDouble()
         );
-        telemetry.addData("extTicks", subSysArm.getExtensionTicks());
-        telemetry.addData("extCM", subSysArm.getExtensionCentimeters());
-        telemetry.addData("rotTicks", subSysArm.getRotationTicks());
-        telemetry.addData("rotDeg", subSysArm.getRotationDegrees());
+
+        String poseExtString = round.format(subSysArm.getExtensionCentimeters());
+        String poseRotString = round.format(subSysArm.getRotationDegrees());
+        String cmdExtString = round.format(extCmd);
+        String cmdRotString = round.format(rotCmd);
+
+        String[] headers = {"", "CM/Deg", "Command"};
+        String[][] data = {
+                {"Ext", poseExtString, cmdExtString},
+                {"Rot", poseRotString, cmdRotString}
+        };
+        String table = AsciiTable.getTable(headers, data);
+        telemetry.addLine(table);
     }
 
     // Returns true when the command should end.

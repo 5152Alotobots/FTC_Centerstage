@@ -1,11 +1,12 @@
 package org.firstinspires.ftc.teamcode.subsystem.drive.commands;
 
 import com.arcrobotics.ftclib.command.CommandBase;
-import com.arcrobotics.ftclib.kinematics.wpilibkinematics.MecanumDriveWheelSpeeds;
+import com.github.freva.asciitable.AsciiTable;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.subsystem.drive.SubSys_Drive;
 
+import java.text.DecimalFormat;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
@@ -19,6 +20,7 @@ public class Cmd_SubSys_Drive_JoystickDefault extends CommandBase
     private final DoubleSupplier yCmd;
     private final DoubleSupplier rotCmd;
     private final BooleanSupplier fieldOriented;
+    private final DecimalFormat round;
 
     public Cmd_SubSys_Drive_JoystickDefault(
             SubSys_Drive subSysDrive,
@@ -35,9 +37,14 @@ public class Cmd_SubSys_Drive_JoystickDefault extends CommandBase
         this.rotCmd = rotCmd;
         this.fieldOriented = fieldOriented;
         addRequirements(subSysDrive);
+
+        // round to TWO decimal places
+        round = new DecimalFormat("0.00");
     }
     @Override
-    public void initialize() {}
+    public void initialize() {
+
+    }
 
     // Called once the command ends or is interrupted.
     @Override
@@ -52,15 +59,21 @@ public class Cmd_SubSys_Drive_JoystickDefault extends CommandBase
                 fieldOriented.getAsBoolean()
         );
 
-        telemetry.addData("POSE XY: ", subSysDrive.getPose().getX() + "," + subSysDrive.getPose().getY());
-        telemetry.addData("COMMAND X: ", xCmd.getAsDouble());
-        telemetry.addData("COMMAND Y: ", yCmd.getAsDouble());
-        telemetry.addData("COMMAND ROT: ", rotCmd.getAsDouble());
-        telemetry.addLine("---");
-        MecanumDriveWheelSpeeds wheelSpeeds = subSysDrive.getWheelSpeeds();
-        telemetry.addData("WHEEL SPEEDS: FL,FR,RL,RR", wheelSpeeds.frontLeftMetersPerSecond +","+wheelSpeeds.frontRightMetersPerSecond+","+wheelSpeeds.rearLeftMetersPerSecond+","+wheelSpeeds.rearRightMetersPerSecond);
-        telemetry.addData("ENCODER TICKS RR:", subSysDrive.getEncoderTicks()[3]);
-        telemetry.update();
+        String poseXString = round.format(subSysDrive.getPose().getX());
+        String poseYString = round.format(subSysDrive.getPose().getY());
+        String poseRotString = round.format(subSysDrive.getPose().getHeading());
+        String cmdXString = round.format(xCmd.getAsDouble());
+        String cmdYString = round.format(yCmd.getAsDouble());
+        String cmdRotString = round.format(rotCmd.getAsDouble());
+
+        String[] headers = {"", "Pose", "Command"};
+        String[][] data = {
+                {"X", poseXString, cmdXString},
+                {"Y", poseYString, cmdYString},
+                {"Rot", poseRotString, cmdRotString},
+        };
+        String table = AsciiTable.getTable(headers, data);
+        telemetry.addLine(table);
 
     }
 

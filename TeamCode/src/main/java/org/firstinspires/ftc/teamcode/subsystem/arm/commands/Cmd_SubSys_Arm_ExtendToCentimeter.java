@@ -2,11 +2,13 @@ package org.firstinspires.ftc.teamcode.subsystem.arm.commands;
 
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.controller.PIDFController;
+import com.github.freva.asciitable.AsciiTable;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.subsystem.arm.SubSys_Arm;
 import org.firstinspires.ftc.teamcode.subsystem.arm.SubSys_Arm_Constants.ExtensionPIDF;
 
+import java.text.DecimalFormat;
 import java.util.function.DoubleSupplier;
 
 public class Cmd_SubSys_Arm_ExtendToCentimeter extends CommandBase
@@ -15,6 +17,7 @@ public class Cmd_SubSys_Arm_ExtendToCentimeter extends CommandBase
     private final SubSys_Arm subSysArm;
     private Telemetry telemetry;
     private DoubleSupplier centimeters;
+    private DecimalFormat round;
 
     // PIDF
     private PIDFController extPid;
@@ -28,6 +31,8 @@ public class Cmd_SubSys_Arm_ExtendToCentimeter extends CommandBase
         this.telemetry = telemetry;
         this.centimeters = centimeters;
         addRequirements(subSysArm);
+
+        round = new DecimalFormat("0.00");
     }
 
     @Override
@@ -58,6 +63,16 @@ public class Cmd_SubSys_Arm_ExtendToCentimeter extends CommandBase
         telemetry.addData("extSetpoint", extPid.atSetPoint());
 
         subSysArm.extend(extCmd);
+
+        String cmdExtString = round.format(extCmd);
+        String setpointExt = round.format(subSysArm.getExtensionCentimeters());
+
+        String[] headers = {"", "Setpoint", "Command"};
+        String[][] data = {
+                {"Ext", setpointExt, cmdExtString},
+        };
+        String table = AsciiTable.getTable(headers, data);
+        telemetry.addLine(table);
 
     }
 

@@ -2,12 +2,14 @@ package org.firstinspires.ftc.teamcode.subsystem.arm.commands;
 
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.controller.PIDFController;
+import com.github.freva.asciitable.AsciiTable;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.subsystem.arm.SubSys_Arm;
 import org.firstinspires.ftc.teamcode.subsystem.arm.SubSys_Arm_Constants.RotationPIDF;
 import org.firstinspires.ftc.teamcode.subsystem.arm.SubSys_Arm_Constants.ExtensionPIDF;
 
+import java.text.DecimalFormat;
 import java.util.function.DoubleSupplier;
 
 public class Cmd_SubSys_Arm_RotateAndExtend extends CommandBase
@@ -17,7 +19,7 @@ public class Cmd_SubSys_Arm_RotateAndExtend extends CommandBase
     private Telemetry telemetry;
     private DoubleSupplier degrees;
     private DoubleSupplier centimeters;
-
+    private DecimalFormat round;
     // PIDF
     private PIDFController extPid;
     private PIDFController rotPid;
@@ -33,6 +35,9 @@ public class Cmd_SubSys_Arm_RotateAndExtend extends CommandBase
         this.degrees = degrees;
         this.centimeters = centimeters;
         addRequirements(subSysArm);
+
+        // round to TWO decimal places
+        round = new DecimalFormat("0.00");
     }
 
     @Override
@@ -57,16 +62,25 @@ public class Cmd_SubSys_Arm_RotateAndExtend extends CommandBase
     @Override
     public void execute() {
         extCmd = extPid.calculate(subSysArm.getExtensionCentimeters(), centimeters.getAsDouble());
-        telemetry.addData("extCmd", extCmd);
-        telemetry.addData("extSetpoint", extPid.atSetPoint());
 
-        subSysArm.extend(extCmd);
+        subSysArm.extend(extCmd); // Extend
 
         rotCmd = rotPid.calculate(subSysArm.getRotationDegrees(), degrees.getAsDouble());
-        telemetry.addData("rotCmd", rotCmd);
-        telemetry.addData("rotSetpoint", rotPid.atSetPoint());
 
-        subSysArm.rotate(rotCmd);
+        subSysArm.rotate(rotCmd); // Rotate
+
+        String cmdExtString = round.format(extCmd);
+        String cmdRotString = round.format(rotCmd);
+        String setpointExt = round.format(subSysArm.getExtensionCentimeters());
+        String setpointRot = round.format(subSysArm.getRotationDegrees());
+
+        String[] headers = {"", "Setpoint", "Command"};
+        String[][] data = {
+                {"Ext", setpointExt, cmdExtString},
+                {"Rot", setpointRot, cmdRotString}
+        };
+        String table = AsciiTable.getTable(headers, data);
+        telemetry.addLine(table);
     }
 
     // Returns true when the command should end.

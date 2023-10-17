@@ -2,11 +2,13 @@ package org.firstinspires.ftc.teamcode.subsystem.arm.commands;
 
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.controller.PIDFController;
+import com.github.freva.asciitable.AsciiTable;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.subsystem.arm.SubSys_Arm;
 import org.firstinspires.ftc.teamcode.subsystem.arm.SubSys_Arm_Constants.RotationPIDF;
 
+import java.text.DecimalFormat;
 import java.util.function.DoubleSupplier;
 
 public class Cmd_SubSys_Arm_RotateToDegree extends CommandBase
@@ -15,6 +17,7 @@ public class Cmd_SubSys_Arm_RotateToDegree extends CommandBase
     private final SubSys_Arm subSysArm;
     private Telemetry telemetry;
     private DoubleSupplier degrees;
+    private final DecimalFormat round;
 
     // PIDF
     PIDFController rotPid;
@@ -28,6 +31,8 @@ public class Cmd_SubSys_Arm_RotateToDegree extends CommandBase
         this.telemetry = telemetry;
         this.degrees = degrees;
         addRequirements(subSysArm);
+
+        round = new DecimalFormat("0.00");
     }
 
     @Override
@@ -52,11 +57,18 @@ public class Cmd_SubSys_Arm_RotateToDegree extends CommandBase
     @Override
     public void execute() {
         rotCmd = rotPid.calculate(subSysArm.getRotationDegrees(), degrees.getAsDouble());
-        telemetry.addData("rotCmd", rotCmd);
-        telemetry.addData("rotSetpoint", rotPid.atSetPoint());
 
-        subSysArm.rotate(rotCmd);
+        subSysArm.rotate(rotCmd); // Rotate
 
+        String cmdRotString = round.format(rotCmd);
+        String setpointRot = round.format(subSysArm.getRotationDegrees());
+
+        String[] headers = {"", "Setpoint", "Command"};
+        String[][] data = {
+                {"Rot", setpointRot, cmdRotString}
+        };
+        String table = AsciiTable.getTable(headers, data);
+        telemetry.addLine(table);
     }
 
     // Returns true when the command should end.
