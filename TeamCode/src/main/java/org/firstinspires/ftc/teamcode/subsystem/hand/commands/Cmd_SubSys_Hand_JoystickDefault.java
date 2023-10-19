@@ -5,44 +5,57 @@ import com.arcrobotics.ftclib.command.CommandBase;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.subsystem.hand.SubSys_Hand;
 
-import java.util.function.BooleanSupplier;
+import java.util.function.DoubleSupplier;
 
 public class Cmd_SubSys_Hand_JoystickDefault extends CommandBase
 {
-    @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-    private final SubSys_Hand subSysShuttle;
+    private SubSys_Hand subSysHand;
     private Telemetry telemetry;
-    private BooleanSupplier rotateUp;
-    private BooleanSupplier rotateDown;
-
+    private DoubleSupplier rotCmd;
     public Cmd_SubSys_Hand_JoystickDefault(
-            SubSys_Hand subSysShuttle,
+            SubSys_Hand subSysHand,
             Telemetry telemetry,
-            BooleanSupplier rotateUp,
-            BooleanSupplier rotateDown) {
+            DoubleSupplier rotCmd) {
 
-        this.subSysShuttle = subSysShuttle;
+        this.subSysHand = subSysHand;
         this.telemetry = telemetry;
-        this.rotateUp = rotateUp;
-        this.rotateDown = rotateDown;
-        addRequirements(subSysShuttle);
+        this.rotCmd = rotCmd;
+
+        addRequirements(subSysHand);
     }
 
+    /**
+     * The initial subroutine of a command.  Called once when the command is initially scheduled.
+     */
     @Override
     public void initialize() {
     }
 
-    // Called once the command ends or is interrupted.
-    @Override
-    public void end(boolean interrupted) {}
-
+    /**
+     * The main body of a command.  Called repeatedly while the command is scheduled.
+     */
     @Override
     public void execute() {
-        // subSysShuttle.rotateWristToDegree(0);
-        telemetry.addData("Current wrist pos:", subSysShuttle.getWristDegrees());
+        subSysHand.rotate(rotCmd.getAsDouble());
+        telemetry.addData("handRotation", subSysHand.getWristRotationDegrees());
     }
 
-    // Returns true when the command should end.
+    /**
+     * The action to take when the command ends.  Called when either the command finishes normally,
+     * or when it interrupted/canceled.
+     *
+     * @param interrupted whether the command was interrupted/canceled
+     */
+    @Override
+    public void end(boolean interrupted) {
+    }
+
+    /**
+     * Whether the command has finished.  Once a command finishes, the scheduler will call its
+     * end() method and un-schedule it.
+     *
+     * @return whether the command has finished.
+     */
     @Override
     public boolean isFinished() {
         return false;

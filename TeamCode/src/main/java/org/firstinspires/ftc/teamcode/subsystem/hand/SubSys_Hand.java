@@ -1,57 +1,44 @@
 package org.firstinspires.ftc.teamcode.subsystem.hand;
 
 import static org.firstinspires.ftc.teamcode.subsystem.hand.SubSys_Hand_Constants.MotorIds.WRIST;
+import static org.firstinspires.ftc.teamcode.subsystem.hand.SubSys_Hand_Constants.Specs.ROTATION_TICKS_PER_DEGREE;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
+import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.Servo;
 
 public class SubSys_Hand extends SubsystemBase
 {
-    private final Servo wrist;
-    // private final DistanceSensor leftSensor;
-    // private final DistanceSensor rightSensor;
-
+    private Motor wristMotor;
     public SubSys_Hand(HardwareMap hwMap) {
-        wrist = hwMap.get(Servo.class, WRIST);
-        // leftSensor = hwMap.get(DistanceSensor.class, "leftsensor");
-        // rightSensor = hwMap.get(DistanceSensor.class, "rightsensor");
+        wristMotor = new Motor(hwMap, WRIST);
+        wristMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+    }
+
+    /**Rotates the wrist at a given power output.
+     * @param power The power to rotate the wrist at.
+     * */
+    public void rotate(double power) {
+        wristMotor.set(power);
 
     }
 
     /**
-     * Rotates the wrist to a given degree
-     * @param degree The degree to rotate to
+     * Takes wrist motor rotation ticks and convert to degrees
+     * @param ticks Motor ticks
+     * @return Degrees
      * */
-    public void rotateWristToDegree(double degree) {
-        wrist.setPosition(degree);
-    }
-
-    /**
-     * Is the left box currently occupied
-     * @return true if occupied
-     * */
-    public boolean leftBoxOccupied() {
-        return false; //leftSensor.getDistance(DistanceUnit.CM) < OCCUPIED_DISTANCE_CM;
-    }
-
-
-    /**
-     * Is the right box currently occupied
-     * @return true if occupied
-     * */
-    public boolean rightBoxOccupied() {
-        return false; //rightSensor.getDistance(DistanceUnit.CM) < OCCUPIED_DISTANCE_CM;
+    public double rotationTicksToDegrees(double ticks) {
+        return (ticks / ROTATION_TICKS_PER_DEGREE);
     }
 
     /**
      * Gets the current position of the wrist rotation in degrees
      * @return Degrees
      * */
-    public double getWristDegrees() {
-        return wrist.getPosition();
+    public double getWristRotationDegrees() {
+        return rotationTicksToDegrees(wristMotor.getCurrentPosition());
     }
-
 
     @Override
     public void periodic() {

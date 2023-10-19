@@ -16,14 +16,11 @@ import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.kinematics.wpilibkinematics.MecanumDriveKinematics;
 import com.arcrobotics.ftclib.kinematics.wpilibkinematics.MecanumDriveOdometry;
 import com.arcrobotics.ftclib.kinematics.wpilibkinematics.MecanumDriveWheelSpeeds;
-import com.arcrobotics.ftclib.util.Timing;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.subsystem.gyro.SubSys_Gyro;
 import org.firstinspires.ftc.teamcode.subsystem.drive.SubSys_Drive_Constants.MotorIds;
-
-import java.util.List;
+import org.firstinspires.ftc.teamcode.subsystem.gyro.SubSys_Gyro;
 
 public class SubSys_Drive extends SubsystemBase
 {
@@ -50,11 +47,9 @@ public class SubSys_Drive extends SubsystemBase
         // Create MecanumDrive
         m_mecanum = new MecanumDrive(m_frontLeftMotor, m_frontRightMotor, m_rearLeftMotor, m_rearRightMotor);
 
-        // Invert motors
-        m_frontLeftMotor.setInverted(false);
+        // Invert motor
         m_frontRightMotor.setInverted(true);
-        m_rearLeftMotor.setInverted(false);
-        m_frontRightMotor.setInverted(true);
+
         // Create gyrosubsys
         this.gyroSubSys = gyroSubSys;
 

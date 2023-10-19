@@ -31,12 +31,12 @@ public class Teleop extends CommandOpMode
         SubSys_Gyro subSysGyro = new SubSys_Gyro(hardwareMap);
         SubSys_Drive subSysDrive = new SubSys_Drive(subSysGyro, hardwareMap);
         SubSys_Arm subSysArm = new SubSys_Arm(hardwareMap);
-        SubSys_Hand subSysShuttle = new SubSys_Hand(hardwareMap);
+        SubSys_Hand subSysHand = new SubSys_Hand(hardwareMap);
 
         // subSysApriltag = new SubSys_Apriltag();
         // subSysTensorflow = new SubSys_Tensorflow();
         // subSysVisionportal = new SubSys_Visionportal(subSysTensorflow, subSysApriltag, hardwareMap);
-        register(subSysDriverStation, subSysGyro, subSysDrive, subSysArm, subSysShuttle);
+        register(subSysDriverStation, subSysGyro, subSysDrive, subSysArm, subSysHand);
 
         /* Default commands */
         subSysDrive.setDefaultCommand(
@@ -54,6 +54,13 @@ public class Teleop extends CommandOpMode
                         telemetry,
                         subSysDriverStation::getCoDriverRightY,
                         subSysDriverStation::getCoDriverLeftY
+                )
+        );
+        subSysHand.setDefaultCommand(
+                new Cmd_SubSys_Hand_JoystickDefault(
+                        subSysHand,
+                        telemetry,
+                        subSysDriverStation::getDriverRightY
                 )
         );
 
@@ -87,15 +94,6 @@ public class Teleop extends CommandOpMode
         subSysDriverStation.resetGyroButton.whenPressed(
                 new InstantCommand(subSysGyro::resetYaw)
         );
-        subSysShuttle.setDefaultCommand(
-                new Cmd_SubSys_Hand_JoystickDefault(
-                        subSysShuttle,
-                        telemetry,
-                        () -> false,
-                        () -> false
-                )
-        );
-
     }
 
 }
