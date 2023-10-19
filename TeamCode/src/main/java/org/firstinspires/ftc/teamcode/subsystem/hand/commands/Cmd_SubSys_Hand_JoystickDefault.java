@@ -38,6 +38,7 @@ public class Cmd_SubSys_Hand_JoystickDefault extends CommandBase
     public void execute() {
         subSysHand.rotate(rotCmd.getAsDouble());
         telemetry.addData("handRotation", subSysHand.getWristRotationDegrees());
+        telemetry.addData("handRotationTicks", subSysHand.getWristRotationTicks());
     }
 
     /**

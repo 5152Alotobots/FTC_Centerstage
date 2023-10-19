@@ -12,7 +12,7 @@ public class SubSys_Hand extends SubsystemBase
     private Motor wristMotor;
     public SubSys_Hand(HardwareMap hwMap) {
         wristMotor = new Motor(hwMap, WRIST);
-        wristMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+       //wristMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
     }
 
     /**Rotates the wrist at a given power output.
@@ -28,7 +28,7 @@ public class SubSys_Hand extends SubsystemBase
      * @param ticks Motor ticks
      * @return Degrees
      * */
-    public double rotationTicksToDegrees(double ticks) {
+    public double rotationTicksToDegrees(int ticks) {
         return (ticks / ROTATION_TICKS_PER_DEGREE);
     }
 
@@ -38,6 +38,14 @@ public class SubSys_Hand extends SubsystemBase
      * */
     public double getWristRotationDegrees() {
         return rotationTicksToDegrees(wristMotor.getCurrentPosition());
+    }
+
+    /**
+     * Gets the current position of the wrist rotation in degrees
+     * @return Degrees
+     * */
+    public int getWristRotationTicks() {
+        return wristMotor.getCurrentPosition();
     }
 
     @Override
