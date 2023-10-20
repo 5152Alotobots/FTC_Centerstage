@@ -30,6 +30,9 @@ public class SubSys_Arm extends SubsystemBase
         // Reset the values when init
         resetExtensionPosition();
         resetRotationPosition();
+
+        // Invert rotation motor so +deg is closer to vertical
+        rotateMotor.setInverted(true);
     }
 
     /**
@@ -37,10 +40,10 @@ public class SubSys_Arm extends SubsystemBase
      * @param power Percent (%) power to rotate at
      * */
     public void rotate(double power) {
-        boolean frontLimit = frontTouch.isPressed() && power > 0; // Don't go down if frontTouch is pressed, allow up
-        boolean backLimit = backTouch.isPressed() && power < 0; // Don't go up if backTouch is pressed, allow down
+        boolean frontLimit = frontTouch.isPressed() && power < 0; // Don't go down if frontTouch is pressed, allow up
+        boolean backLimit = backTouch.isPressed() && power > 0; // Don't go up if backTouch is pressed, allow down
         // Don't go down further IF extended further than MAX_EXT_AT_INTAKE and rotation is greater (further down) than INTAKE_POS_SOFT_LIMIT, allow up
-        boolean intakeSoftLimit = getExtensionCentimeters() > MAX_EXT_AT_INTAKE && getRotationDegrees() > INTAKE_POS_SOFT_LIMIT && power > 0;
+        boolean intakeSoftLimit = getExtensionCentimeters() > MAX_EXT_AT_INTAKE && getRotationDegrees() < INTAKE_POS_SOFT_LIMIT && power > 0;
         if (frontLimit || backLimit || intakeSoftLimit) {
             rotateMotor.set(0); // FORCE NO OUTPUT
         } else {
@@ -56,7 +59,7 @@ public class SubSys_Arm extends SubsystemBase
     public void extend(double power) {
         boolean inLimit = inTouch.isPressed() && power < 0; // Don't go in if inTouch is pressed, allow out
         boolean outLimit = OUTER_EXTEND_LIMIT < getExtensionCentimeters() && power > 0; // Don't go out if further than OUTER_EXTEND_LIMIT, allow in
-        boolean intakeSoftLimit = getRotationDegrees() > INTAKE_POS_SOFT_LIMIT && power > 0; // Don't go out if within soft limit, allow in
+        boolean intakeSoftLimit = getRotationDegrees() < INTAKE_POS_SOFT_LIMIT && power > 0; // Don't go out if within soft limit, allow in
         if (inLimit || outLimit || intakeSoftLimit) {
             extendMotor.set(0); // Force NO OUTPUT
         } else {

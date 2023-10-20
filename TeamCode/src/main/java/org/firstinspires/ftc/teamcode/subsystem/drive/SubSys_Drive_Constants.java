@@ -33,7 +33,7 @@ public class SubSys_Drive_Constants
     {
         public static final double WHEEL_DIAMETER = 0.075; // Meters
         public static final double TICKS_PER_ROTATION = 515; // Ticks
-        public static final double TICKS_PER_METER = 2186.84; // Ticks
+        public static final double TICKS_PER_CENTIMETER = 21.8684; // Ticks
     }
 
     public static class PIDF
