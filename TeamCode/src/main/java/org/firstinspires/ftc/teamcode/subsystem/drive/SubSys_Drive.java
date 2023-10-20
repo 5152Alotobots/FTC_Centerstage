@@ -4,7 +4,7 @@ import static org.firstinspires.ftc.teamcode.subsystem.drive.SubSys_Drive_Consta
 import static org.firstinspires.ftc.teamcode.subsystem.drive.SubSys_Drive_Constants.BACK_RIGHT_LOCATION;
 import static org.firstinspires.ftc.teamcode.subsystem.drive.SubSys_Drive_Constants.FRONT_LEFT_LOCATION;
 import static org.firstinspires.ftc.teamcode.subsystem.drive.SubSys_Drive_Constants.FRONT_RIGHT_LOCATION;
-import static org.firstinspires.ftc.teamcode.subsystem.drive.SubSys_Drive_Constants.Specs.TICKS_PER_METER;
+import static org.firstinspires.ftc.teamcode.subsystem.drive.SubSys_Drive_Constants.Specs.TICKS_PER_CENTIMETER;
 import static org.firstinspires.ftc.teamcode.subsystem.drive.SubSys_Drive_Constants.Tuning;
 import static org.firstinspires.ftc.teamcode.subsystem.drive.SubSys_Drive_Constants.startPose;
 
@@ -75,13 +75,13 @@ public class SubSys_Drive extends SubsystemBase
                 );
     }
 
-    public double ticksToMeters(double ticks) {
-        return (ticks / TICKS_PER_METER);
+    public double ticksToCentimeters(double ticks) {
+        return (ticks / TICKS_PER_CENTIMETER);
     }
     public MecanumDriveWheelSpeeds getWheelSpeeds() {
         return new MecanumDriveWheelSpeeds(
-        ticksToMeters(m_frontLeftMotor.getRate()), ticksToMeters(m_frontRightMotor.getRate()),
-        ticksToMeters(m_rearLeftMotor.getRate()), ticksToMeters(m_rearRightMotor.getRate())
+                ticksToCentimeters(m_frontLeftMotor.getRate()), ticksToCentimeters(m_frontRightMotor.getRate()),
+                ticksToCentimeters(m_rearLeftMotor.getRate()), ticksToCentimeters(m_rearRightMotor.getRate())
         );
 
     }
