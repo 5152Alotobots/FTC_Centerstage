@@ -13,6 +13,7 @@ import org.firstinspires.ftc.teamcode.subsystem.driverstation.SubSys_DriverStati
 import org.firstinspires.ftc.teamcode.subsystem.gyro.SubSys_Gyro;
 import org.firstinspires.ftc.teamcode.subsystem.hand.SubSys_Hand;
 import org.firstinspires.ftc.teamcode.subsystem.hand.commands.Cmd_SubSys_Hand_JoystickDefault;
+import org.firstinspires.ftc.teamcode.subsystem.launcher.SubSys_Launcher;
 import org.firstinspires.ftc.teamcode.subsystem.visionportal.SubSys_Visionportal;
 import org.firstinspires.ftc.teamcode.subsystem.visionportal.apriltag.SubSys_Apriltag;
 import org.firstinspires.ftc.teamcode.subsystem.visionportal.tensorflow.SubSys_Tensorflow;
@@ -32,11 +33,12 @@ public class Teleop extends CommandOpMode
         SubSys_Drive subSysDrive = new SubSys_Drive(subSysGyro, hardwareMap);
         SubSys_Arm subSysArm = new SubSys_Arm(hardwareMap);
         SubSys_Hand subSysHand = new SubSys_Hand(hardwareMap);
+        SubSys_Launcher subSysLauncher = new SubSys_Launcher(hardwareMap);
 
         // subSysApriltag = new SubSys_Apriltag();
         // subSysTensorflow = new SubSys_Tensorflow();
         // subSysVisionportal = new SubSys_Visionportal(subSysTensorflow, subSysApriltag, hardwareMap);
-        register(subSysDriverStation, subSysGyro, subSysDrive, subSysArm, subSysHand);
+        register(subSysDriverStation, subSysGyro, subSysDrive, subSysArm, subSysHand, subSysLauncher);
 
         /* Default commands */
         subSysDrive.setDefaultCommand(
@@ -93,6 +95,12 @@ public class Teleop extends CommandOpMode
         /* Misc */
         subSysDriverStation.resetGyroButton.whenPressed(
                 new InstantCommand(subSysGyro::resetYaw)
+        );
+        subSysDriverStation.armLauncherButton.whenPressed(
+                new InstantCommand(() -> subSysLauncher.rotateToPosition(1))
+        );
+        subSysDriverStation.fireLauncherButton.whenPressed(
+                new InstantCommand(() -> subSysLauncher.rotateToPosition(-1.0))
         );
     }
 
