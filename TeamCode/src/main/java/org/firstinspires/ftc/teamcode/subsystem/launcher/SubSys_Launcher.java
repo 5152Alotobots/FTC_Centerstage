@@ -13,5 +13,10 @@ public class SubSys_Launcher extends SubsystemBase
 
         launcherServo = hwMap.get(Servo.class, LAUNCHER);
     }
-    public void rotateToPosition()
+    /** Rotates the servo to a specified position
+     * @param position -1.0-1.0
+     * */
+    public void rotateToPosition(double position) {
+        launcherServo.setPosition(position);
+    }
 }

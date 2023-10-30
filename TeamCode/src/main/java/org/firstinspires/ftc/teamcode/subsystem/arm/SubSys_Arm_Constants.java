@@ -11,7 +11,7 @@ public class SubSys_Arm_Constants
     public static class Tuning
     {
         /** Outer extension limit */
-        public static final double OUTER_EXTEND_LIMIT = 67;
+        public static final double OUTER_EXTEND_LIMIT = 49; //Originally 67cm
         /** Don't allow rotation down if the extension is above MAX_EXT_AT_INTAKE at this limit*/
         public static final double INTAKE_POS_SOFT_LIMIT = 30;
         /** Maximum value to allowed to extend at intake level */

@@ -13,6 +13,8 @@ import org.firstinspires.ftc.teamcode.subsystem.driverstation.SubSys_DriverStati
 import org.firstinspires.ftc.teamcode.subsystem.gyro.SubSys_Gyro;
 import org.firstinspires.ftc.teamcode.subsystem.hand.SubSys_Hand;
 import org.firstinspires.ftc.teamcode.subsystem.hand.commands.Cmd_SubSys_Hand_JoystickDefault;
+import org.firstinspires.ftc.teamcode.subsystem.intake.SubSys_Intake;
+import org.firstinspires.ftc.teamcode.subsystem.intake.commands.Cmd_SubSys_Intake_JoystickDefault;
 import org.firstinspires.ftc.teamcode.subsystem.launcher.SubSys_Launcher;
 import org.firstinspires.ftc.teamcode.subsystem.visionportal.SubSys_Visionportal;
 import org.firstinspires.ftc.teamcode.subsystem.visionportal.apriltag.SubSys_Apriltag;
@@ -33,19 +35,20 @@ public class Teleop extends CommandOpMode
         SubSys_Drive subSysDrive = new SubSys_Drive(subSysGyro, hardwareMap);
         SubSys_Arm subSysArm = new SubSys_Arm(hardwareMap);
         SubSys_Hand subSysHand = new SubSys_Hand(hardwareMap);
+        SubSys_Intake subSysIntake = new SubSys_Intake(hardwareMap);
         SubSys_Launcher subSysLauncher = new SubSys_Launcher(hardwareMap);
 
         // subSysApriltag = new SubSys_Apriltag();
         // subSysTensorflow = new SubSys_Tensorflow();
         // subSysVisionportal = new SubSys_Visionportal(subSysTensorflow, subSysApriltag, hardwareMap);
-        register(subSysDriverStation, subSysGyro, subSysDrive, subSysArm, subSysHand, subSysLauncher);
+        register(subSysDriverStation, subSysGyro, subSysDrive, subSysArm, subSysHand, subSysIntake, subSysLauncher);
 
         /* Default commands */
         subSysDrive.setDefaultCommand(
                 new Cmd_SubSys_Drive_JoystickDefault(
                         subSysDrive,
                         telemetry,
-                        subSysDriverStation::getDriverLeftX,
+                        () -> -subSysDriverStation.getDriverLeftX(),
                         subSysDriverStation::getDriverLeftY,
                         subSysDriverStation::getDriverRightX,
                         () -> true
@@ -63,6 +66,14 @@ public class Teleop extends CommandOpMode
                         subSysHand,
                         telemetry,
                         subSysDriverStation::getDriverRightY
+                )
+        );
+        subSysIntake.setDefaultCommand(
+                new Cmd_SubSys_Intake_JoystickDefault(
+                        subSysIntake,
+                        telemetry,
+                        () -> subSysDriverStation.getCoDriverRightTrigger()
+                                -subSysDriverStation.getCoDriverLeftTrigger()
                 )
         );
 
@@ -92,6 +103,40 @@ public class Teleop extends CommandOpMode
                 ).withTimeout(3000)
         );
 
+        /* Intake default command - Use controller if input, else auto intake when at 0deg */
+        /*
+        subSysIntake.setDefaultCommand(
+                new ConditionalCommand(
+                        new Cmd_SubSys_Intake_RunWhenArmDegree(
+                                subSysIntake,
+                                subSysArm,
+                                telemetry,
+                                () -> 1,
+                                () -> 0
+                        ),
+                        new Cmd_SubSys_Intake_JoystickDefault(
+                                subSysIntake,
+                                telemetry,
+                                () -> subSysDriverStation.getCoDriverLeftTrigger() - subSysDriverStation.getCoDriverRightTrigger()
+                        ),
+                        () -> (subSysDriverStation.getCoDriverLeftTrigger() > 0.1 || subSysDriverStation.getCoDriverRightTrigger() > 0.1)
+                )
+        );
+        */
+
+
+        /* Hand Commands */
+        subSysDriverStation.toggleLeftDropButton.whenPressed(
+                new InstantCommand(
+                        subSysHand::toggleLeftBack
+                )
+        );
+        subSysDriverStation.toggleRightDropButton.whenPressed(
+                new InstantCommand(
+                        subSysHand::toggleRightBack
+                )
+        );
+
         /* Misc */
         subSysDriverStation.resetGyroButton.whenPressed(
                 new InstantCommand(subSysGyro::resetYaw)
@@ -102,6 +147,7 @@ public class Teleop extends CommandOpMode
         subSysDriverStation.fireLauncherButton.whenPressed(
                 new InstantCommand(() -> subSysLauncher.rotateToPosition(-1.0))
         );
+
     }
 
     @Override

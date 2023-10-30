@@ -36,22 +36,6 @@ public class SubSys_Intake extends SubsystemBase
     }
 
     /**
-     * Is the left box currently occupied
-     * @return true if occupied
-     * */
-    public boolean leftBoxOccupied() {
-        return false; //leftSensor.getDistance(DistanceUnit.CM) < OCCUPIED_DISTANCE_CM;
-    }
-
-    /**
-     * Is the right box currently occupied
-     * @return true if occupied
-     * */
-    public boolean rightBoxOccupied() {
-        return false; //rightSensor.getDistance(DistanceUnit.CM) < OCCUPIED_DISTANCE_CM;
-    }
-
-    /**
      * Gets the current position of the intake rotation in degrees
      * @return Degrees
      * */
