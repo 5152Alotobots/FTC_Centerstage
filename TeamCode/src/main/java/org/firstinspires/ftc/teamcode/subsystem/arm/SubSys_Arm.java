@@ -47,7 +47,8 @@ public class SubSys_Arm extends SubsystemBase
         if (frontLimit || backLimit || intakeSoftLimit) {
             rotateMotor.set(0); // FORCE NO OUTPUT
         } else {
-            rotateMotor.set(power); // Run output
+            //rotateMotor.set(MathUtils.clamp(power, -MAX_ROTATION_SPEED, MAX_ROTATION_SPEED)); // Run output
+            rotateMotor.set(power);
         }
     }
 
@@ -63,7 +64,8 @@ public class SubSys_Arm extends SubsystemBase
         if (inLimit || outLimit || intakeSoftLimit) {
             extendMotor.set(0); // Force NO OUTPUT
         } else {
-            extendMotor.set(power); // Run output
+            //extendMotor.set(MathUtils.clamp(power, -MAX_EXTENSION_SPEED, MAX_EXTENSION_SPEED)); // Run output
+            extendMotor.set(power);
         }
     }
 

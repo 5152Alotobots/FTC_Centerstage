@@ -51,7 +51,7 @@ public class Teleop extends CommandOpMode
                         () -> -subSysDriverStation.getDriverLeftX(),
                         subSysDriverStation::getDriverLeftY,
                         subSysDriverStation::getDriverRightX,
-                        () -> true
+                        () -> false
                 ));
         subSysArm.setDefaultCommand(
                 new Cmd_SubSys_Arm_JoystickDefault(
@@ -64,6 +64,7 @@ public class Teleop extends CommandOpMode
         subSysHand.setDefaultCommand(
                 new Cmd_SubSys_Hand_JoystickDefault(
                         subSysHand,
+                        subSysArm,
                         telemetry,
                         subSysDriverStation::getDriverRightY
                 )
@@ -71,6 +72,7 @@ public class Teleop extends CommandOpMode
         subSysIntake.setDefaultCommand(
                 new Cmd_SubSys_Intake_JoystickDefault(
                         subSysIntake,
+                        subSysArm,
                         telemetry,
                         () -> subSysDriverStation.getCoDriverRightTrigger()
                                 -subSysDriverStation.getCoDriverLeftTrigger()
@@ -104,26 +106,6 @@ public class Teleop extends CommandOpMode
         );
 
         /* Intake default command - Use controller if input, else auto intake when at 0deg */
-        /*
-        subSysIntake.setDefaultCommand(
-                new ConditionalCommand(
-                        new Cmd_SubSys_Intake_RunWhenArmDegree(
-                                subSysIntake,
-                                subSysArm,
-                                telemetry,
-                                () -> 1,
-                                () -> 0
-                        ),
-                        new Cmd_SubSys_Intake_JoystickDefault(
-                                subSysIntake,
-                                telemetry,
-                                () -> subSysDriverStation.getCoDriverLeftTrigger() - subSysDriverStation.getCoDriverRightTrigger()
-                        ),
-                        () -> (subSysDriverStation.getCoDriverLeftTrigger() > 0.1 || subSysDriverStation.getCoDriverRightTrigger() > 0.1)
-                )
-        );
-        */
-
 
         /* Hand Commands */
         subSysDriverStation.toggleLeftDropButton.whenPressed(
