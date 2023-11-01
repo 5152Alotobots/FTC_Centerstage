@@ -118,6 +118,14 @@ public class Teleop extends CommandOpMode
                         subSysHand::toggleRightBack
                 )
         );
+        subSysDriverStation.toggleGatesButton.whenPressed(
+                new InstantCommand(
+                        () -> {
+                            subSysHand.toggleLeftFront();
+                            subSysHand.toggleRightFront();
+                        }
+                )
+        );
 
         /* Misc */
         subSysDriverStation.resetGyroButton.whenPressed(

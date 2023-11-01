@@ -23,6 +23,7 @@ public class SubSys_DriverStation extends SubsystemBase
     public final GamepadButton armHighPositionButton;
     public final GamepadButton toggleLeftDropButton;
     public final GamepadButton toggleRightDropButton;
+    public final GamepadButton toggleGatesButton;
 
     public final GamepadButton testButton;
 
@@ -41,6 +42,7 @@ public class SubSys_DriverStation extends SubsystemBase
         this.coDriverController = coDriverController;
         armIntakePositionButton = new GamepadButton(coDriverController, GamepadKeys.Button.A);
         armMidPositionButton = new GamepadButton(coDriverController, GamepadKeys.Button.B);
+        toggleGatesButton = new GamepadButton(coDriverController, GamepadKeys.Button.X);
         armHighPositionButton = new GamepadButton(coDriverController, GamepadKeys.Button.Y);
         toggleLeftDropButton = new GamepadButton(coDriverController, GamepadKeys.Button.LEFT_BUMPER);
         toggleRightDropButton = new GamepadButton(coDriverController, GamepadKeys.Button.RIGHT_BUMPER);

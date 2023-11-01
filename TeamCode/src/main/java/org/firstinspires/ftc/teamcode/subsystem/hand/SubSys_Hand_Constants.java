@@ -25,12 +25,12 @@ public class SubSys_Hand_Constants
         public static final double MAX_ROTATION_SPEED = 0.2;
 
         // Servos
-        public static final double CLOSED_LEFT_FRONT_POS = -1;
+        public static final double CLOSED_LEFT_FRONT_POS = 1;
         public static final double CLOSED_LEFT_BACK_POS = -0.7;
-        public static final double CLOSED_RIGHT_FRONT_POS = -1;
+        public static final double CLOSED_RIGHT_FRONT_POS = 1;
         public static final double CLOSED_RIGHT_BACK_POS = -1;
 
-        public static final double OPEN_LEFT_FRONT_POS = 1;
+        public static final double OPEN_LEFT_FRONT_POS = -1;
         public static final double OPEN_LEFT_BACK_POS = 1;
         public static final double OPEN_RIGHT_FRONT_POS = -1;
         public static final double OPEN_RIGHT_BACK_POS = 1;

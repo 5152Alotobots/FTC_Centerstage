@@ -1,9 +1,12 @@
 package org.firstinspires.ftc.teamcode.subsystem.arm;
 
+import static com.arcrobotics.ftclib.util.MathUtils.clamp;
 import static org.firstinspires.ftc.teamcode.subsystem.arm.SubSys_Arm_Constants.Specs.EXTENSION_TICKS_PER_CENTIMETER;
 import static org.firstinspires.ftc.teamcode.subsystem.arm.SubSys_Arm_Constants.Specs.ROTATION_TICKS_PER_DEGREE;
 import static org.firstinspires.ftc.teamcode.subsystem.arm.SubSys_Arm_Constants.Tuning.INTAKE_POS_SOFT_LIMIT;
+import static org.firstinspires.ftc.teamcode.subsystem.arm.SubSys_Arm_Constants.Tuning.MAX_EXTENSION_SPEED;
 import static org.firstinspires.ftc.teamcode.subsystem.arm.SubSys_Arm_Constants.Tuning.MAX_EXT_AT_INTAKE;
+import static org.firstinspires.ftc.teamcode.subsystem.arm.SubSys_Arm_Constants.Tuning.MAX_ROTATION_SPEED;
 import static org.firstinspires.ftc.teamcode.subsystem.arm.SubSys_Arm_Constants.Tuning.OUTER_EXTEND_LIMIT;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
@@ -47,8 +50,7 @@ public class SubSys_Arm extends SubsystemBase
         if (frontLimit || backLimit || intakeSoftLimit) {
             rotateMotor.set(0); // FORCE NO OUTPUT
         } else {
-            //rotateMotor.set(MathUtils.clamp(power, -MAX_ROTATION_SPEED, MAX_ROTATION_SPEED)); // Run output
-            rotateMotor.set(power);
+            rotateMotor.set(clamp(power, -MAX_ROTATION_SPEED, MAX_ROTATION_SPEED)); // Run output
         }
     }
 
@@ -64,8 +66,7 @@ public class SubSys_Arm extends SubsystemBase
         if (inLimit || outLimit || intakeSoftLimit) {
             extendMotor.set(0); // Force NO OUTPUT
         } else {
-            //extendMotor.set(MathUtils.clamp(power, -MAX_EXTENSION_SPEED, MAX_EXTENSION_SPEED)); // Run output
-            extendMotor.set(power);
+            extendMotor.set(clamp(power, -MAX_EXTENSION_SPEED, MAX_EXTENSION_SPEED)); // Run output
         }
     }
 

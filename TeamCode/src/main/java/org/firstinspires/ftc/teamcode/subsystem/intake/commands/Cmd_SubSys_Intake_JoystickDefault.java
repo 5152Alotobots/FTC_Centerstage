@@ -51,6 +51,8 @@ public class Cmd_SubSys_Intake_JoystickDefault extends CommandBase
             );
         } else if (inZone) {
             subSysIntake.intake(1); // Intake full speed in
+        } else {
+            subSysIntake.intake(0);
         }
     }
 
