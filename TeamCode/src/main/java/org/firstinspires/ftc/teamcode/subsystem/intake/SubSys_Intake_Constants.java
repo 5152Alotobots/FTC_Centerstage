@@ -9,8 +9,13 @@ public class SubSys_Intake_Constants
 
     public static class Tuning
     {
+        public static final double MAX_ROTATION_SPEED = 1.0;
+
         /** If less than this distance, box is occupied*/
         public static final double OCCUPIED_DISTANCE_CM = 3;
+
+        /** +/- to detect that the arm is close enough to run the intake.*/
+        public static final double ARM_DEGREE_TOLERANCE = 2;
     }
 
     public static class Specs {

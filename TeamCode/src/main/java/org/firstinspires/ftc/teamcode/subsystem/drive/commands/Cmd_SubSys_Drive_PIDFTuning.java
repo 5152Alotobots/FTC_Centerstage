@@ -5,13 +5,9 @@ import com.arcrobotics.ftclib.controller.PIDFController;
 import com.arcrobotics.ftclib.geometry.Pose2d;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.teamcode.subsystem.drive.SubSys_Drive;
 import org.firstinspires.ftc.teamcode.subsystem.drive.SubSys_Drive_Constants.AngularPIDF;
 import org.firstinspires.ftc.teamcode.subsystem.drive.SubSys_Drive_Constants.PIDF;
-import org.firstinspires.ftc.teamcode.subsystem.visionportal.SubSys_Visionportal;
-import org.firstinspires.ftc.teamcode.subsystem.visionportal.tensorflow.SubSys_Tensorflow;
-import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 
 public class Cmd_SubSys_Drive_PIDFTuning extends CommandBase
 {
@@ -73,7 +69,6 @@ public class Cmd_SubSys_Drive_PIDFTuning extends CommandBase
         telemetry.addData("COMMAND ROT", rotCmd);
         telemetry.addData("AT SETPOINT ROT", rotPid.atSetPoint());
         telemetry.addData("ROT POSE: ", currentPose.getRotation().getDegrees());
-        telemetry.update();
     }
 
     // Returns true when the command should end.

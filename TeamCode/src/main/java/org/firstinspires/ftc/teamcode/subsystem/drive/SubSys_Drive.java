@@ -47,11 +47,9 @@ public class SubSys_Drive extends SubsystemBase
         // Create MecanumDrive
         m_mecanum = new MecanumDrive(m_frontLeftMotor, m_frontRightMotor, m_rearLeftMotor, m_rearRightMotor);
 
-        // Invert motors
-        m_frontLeftMotor.setInverted(false);
+        // Invert motor
         m_frontRightMotor.setInverted(true);
-        m_rearLeftMotor.setInverted(false);
-        m_frontRightMotor.setInverted(true);
+
         // Create gyrosubsys
         this.gyroSubSys = gyroSubSys;
 

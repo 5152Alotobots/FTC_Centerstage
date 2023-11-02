@@ -1,9 +1,11 @@
 package org.firstinspires.ftc.teamcode.subsystem.intake;
 
 import static org.firstinspires.ftc.teamcode.subsystem.intake.SubSys_Intake_Constants.Specs.INTAKE_TICKS_PER_DEGREE;
+import static org.firstinspires.ftc.teamcode.subsystem.intake.SubSys_Intake_Constants.Tuning.MAX_ROTATION_SPEED;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
+import com.arcrobotics.ftclib.util.MathUtils;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.subsystem.intake.SubSys_Intake_Constants.MotorIds;
@@ -23,7 +25,7 @@ public class SubSys_Intake extends SubsystemBase
      * @param power Percent (%) power to rotate at
      * */
     public void intake(double power) {
-        intakeMotor.set(power);
+        intakeMotor.set(MathUtils.clamp(power, -MAX_ROTATION_SPEED, MAX_ROTATION_SPEED));
     }
 
     /**
@@ -33,22 +35,6 @@ public class SubSys_Intake extends SubsystemBase
      * */
     public double intakeTicksToDegrees(int ticks) {
         return (ticks / INTAKE_TICKS_PER_DEGREE);
-    }
-
-    /**
-     * Is the left box currently occupied
-     * @return true if occupied
-     * */
-    public boolean leftBoxOccupied() {
-        return false; //leftSensor.getDistance(DistanceUnit.CM) < OCCUPIED_DISTANCE_CM;
-    }
-
-    /**
-     * Is the right box currently occupied
-     * @return true if occupied
-     * */
-    public boolean rightBoxOccupied() {
-        return false; //rightSensor.getDistance(DistanceUnit.CM) < OCCUPIED_DISTANCE_CM;
     }
 
     /**
