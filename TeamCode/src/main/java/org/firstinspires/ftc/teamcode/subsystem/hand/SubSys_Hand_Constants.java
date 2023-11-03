@@ -20,8 +20,8 @@ public class SubSys_Hand_Constants
     public static class Tuning
     {
         // Rotation
-        public static final double ROTATION_UP_LIMIT = 48;
-        public static final double ROTATION_DOWN_LIMIT = -35;
+        public static final double ROTATION_UP_LIMIT = 55;
+        public static final double ROTATION_DOWN_LIMIT = -20;
         public static final double MAX_ROTATION_SPEED = 0.2;
 
         // Servos

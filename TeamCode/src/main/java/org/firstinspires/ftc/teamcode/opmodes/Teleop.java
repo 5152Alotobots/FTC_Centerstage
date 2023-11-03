@@ -4,6 +4,8 @@ import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.commandGroups.CmdGrpPar_ArmPosIntake;
+import org.firstinspires.ftc.teamcode.commandGroups.CmdGrpPar_ArmPosLow;
 import org.firstinspires.ftc.teamcode.subsystem.arm.SubSys_Arm;
 import org.firstinspires.ftc.teamcode.subsystem.arm.commands.Cmd_SubSys_Arm_JoystickDefault;
 import org.firstinspires.ftc.teamcode.subsystem.arm.commands.Cmd_SubSys_Arm_RotateAndExtend;
@@ -57,7 +59,7 @@ public class Teleop extends CommandOpMode
                 new Cmd_SubSys_Arm_JoystickDefault(
                         subSysArm,
                         telemetry,
-                        () -> -subSysDriverStation.getCoDriverRightY(),
+                        () -> subSysDriverStation.getCoDriverRightY(),
                         subSysDriverStation::getCoDriverLeftY
                 )
         );
@@ -66,7 +68,8 @@ public class Teleop extends CommandOpMode
                         subSysHand,
                         subSysArm,
                         telemetry,
-                        subSysDriverStation::getDriverRightY
+                        () -> subSysDriverStation.isCoDriverDpadUp()
+                                -subSysDriverStation.isCoDriverDpadDown()
                 )
         );
         subSysIntake.setDefaultCommand(
@@ -81,12 +84,18 @@ public class Teleop extends CommandOpMode
 
         /* Arm positions */
         subSysDriverStation.armIntakePositionButton.whenPressed(
-            new Cmd_SubSys_Arm_RotateAndExtend(
-                    subSysArm,
-                    telemetry,
-                    () -> 0,
-                    () -> 0
-            ).withTimeout(2500)
+                new CmdGrpPar_ArmPosIntake(
+                        subSysArm,
+                        subSysHand,
+                        telemetry
+                ).withTimeout(3000)
+        );
+        subSysDriverStation.armLowPositionButton.whenPressed(
+                new CmdGrpPar_ArmPosLow(
+                        subSysArm,
+                        subSysHand,
+                        telemetry
+                ).withTimeout(3000)
         );
         subSysDriverStation.armMidPositionButton.whenPressed(
                 new Cmd_SubSys_Arm_RotateAndExtend(
@@ -100,8 +109,8 @@ public class Teleop extends CommandOpMode
                 new Cmd_SubSys_Arm_RotateAndExtend(
                         subSysArm,
                         telemetry,
-                        () -> 90,
-                        () -> 0
+                        () -> 65,
+                        () -> 70
                 ).withTimeout(3000)
         );
 

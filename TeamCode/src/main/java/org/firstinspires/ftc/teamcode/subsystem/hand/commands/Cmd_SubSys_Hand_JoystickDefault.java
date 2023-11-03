@@ -6,7 +6,6 @@ import com.arcrobotics.ftclib.controller.PIDFController;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.subsystem.arm.SubSys_Arm;
 import org.firstinspires.ftc.teamcode.subsystem.hand.SubSys_Hand;
-import org.firstinspires.ftc.teamcode.subsystem.hand.SubSys_Hand_Constants;
 
 import java.util.function.DoubleSupplier;
 
@@ -39,13 +38,6 @@ public class Cmd_SubSys_Hand_JoystickDefault extends CommandBase
      */
     @Override
     public void initialize() {
-        // Create new PIDF controller with values in SubSys_Hand_Constants
-        rotPid = new PIDFController(
-                SubSys_Hand_Constants.RotationPIDF.kP,
-                SubSys_Hand_Constants.RotationPIDF.kI,
-                SubSys_Hand_Constants.RotationPIDF.kD,
-                SubSys_Hand_Constants.RotationPIDF.kF);
-        rotPid.setTolerance(1); // Degrees
     }
 
     /**
@@ -53,14 +45,10 @@ public class Cmd_SubSys_Hand_JoystickDefault extends CommandBase
      */
     @Override
     public void execute() {
-        double rotCmdDouble = rotCmd.getAsDouble();
-        if (rotCmdDouble == 0) {
-            subSysHand.rotate(rotCmd.getAsDouble());
-        } else {
-            double pidCmd = rotPid.calculate(subSysArm.getRotationDegrees() - 30);
-            subSysHand.rotate(pidCmd);
-        }
+        subSysHand.rotate(rotCmd.getAsDouble());
+        // subSysHand.rotate(rotCmd.getAsDouble());
         telemetry.addData("handRotation", subSysHand.getRotationDegrees());
+        telemetry.addData("ArmRotRate", subSysArm.getRotationRate());
     }
 
     /**

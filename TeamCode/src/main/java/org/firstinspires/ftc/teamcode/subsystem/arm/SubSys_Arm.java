@@ -158,7 +158,21 @@ public class SubSys_Arm extends SubsystemBase
         extendMotor.resetEncoder();
     }
 
+    /**
+     * Gets the current rate of the rotation motors encoder
+     * @return Encoder rate
+     * */
+    public double getRotationRate() {
+        return rotateMotor.getRate();
+    }
 
+    /**
+     * Gets the current rate of the extension motors encoder
+     * @return Encoder rate
+     * */
+    public double getExtensionRate() {
+        return  extendMotor.getRate();
+    }
 
     @Override
     public void periodic() {

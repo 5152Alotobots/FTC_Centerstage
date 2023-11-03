@@ -19,13 +19,12 @@ public class SubSys_DriverStation extends SubsystemBase
 
     // CoDriver
     public final GamepadButton armIntakePositionButton;
+    public final GamepadButton armLowPositionButton;
     public final GamepadButton armMidPositionButton;
     public final GamepadButton armHighPositionButton;
     public final GamepadButton toggleLeftDropButton;
     public final GamepadButton toggleRightDropButton;
     public final GamepadButton toggleGatesButton;
-
-    public final GamepadButton testButton;
 
 
     public SubSys_DriverStation(Gamepad gamepad1, Gamepad gamepad2) {
@@ -40,13 +39,14 @@ public class SubSys_DriverStation extends SubsystemBase
         /* CoDriver controller */
         GamepadEx coDriverController = new GamepadEx(gamepad2);
         this.coDriverController = coDriverController;
-        armIntakePositionButton = new GamepadButton(coDriverController, GamepadKeys.Button.A);
+        armIntakePositionButton = new GamepadButton(coDriverController, GamepadKeys.Button.X);
+        armLowPositionButton = new GamepadButton(coDriverController, GamepadKeys.Button.A);
         armMidPositionButton = new GamepadButton(coDriverController, GamepadKeys.Button.B);
-        toggleGatesButton = new GamepadButton(coDriverController, GamepadKeys.Button.X);
+        toggleGatesButton = new GamepadButton(coDriverController, GamepadKeys.Button.START);
         armHighPositionButton = new GamepadButton(coDriverController, GamepadKeys.Button.Y);
         toggleLeftDropButton = new GamepadButton(coDriverController, GamepadKeys.Button.LEFT_BUMPER);
         toggleRightDropButton = new GamepadButton(coDriverController, GamepadKeys.Button.RIGHT_BUMPER);
-        testButton = new GamepadButton(coDriverController, GamepadKeys.Button.X);
+
     }
 
     /* Driver controller */
@@ -79,6 +79,34 @@ public class SubSys_DriverStation extends SubsystemBase
     }
     public double getCoDriverLeftTrigger() {
         return  coDriverController.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER);
+    }
+    public double isCoDriverDpadUp() {
+        if (coDriverController.isDown(GamepadKeys.Button.DPAD_UP)) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+    public double isCoDriverDpadDown() {
+        if (coDriverController.isDown(GamepadKeys.Button.DPAD_DOWN)) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+    public double isCoDriverDpadLeft() {
+        if (coDriverController.isDown(GamepadKeys.Button.DPAD_LEFT)) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+    public double isCoDriverDpadRight() {
+        if (coDriverController.isDown(GamepadKeys.Button.DPAD_RIGHT)) {
+            return 1;
+        } else {
+            return 0;
+        }
     }
     public double getCoDriverRightX() {
         return coDriverController.getRightX();
