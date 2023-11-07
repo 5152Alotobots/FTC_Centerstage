@@ -1,9 +1,10 @@
 package org.firstinspires.ftc.teamcode.subsystem.gyro;
 
-import org.firstinspires.ftc.teamcode.subsystem.gyro.SubSys_Gyro_Constants.ImuConfig;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
+
+import org.firstinspires.ftc.teamcode.subsystem.gyro.SubSys_Gyro_Constants.ImuConfig;
 
 public class SubSys_Gyro extends SubsystemBase {
 
@@ -27,15 +28,21 @@ public class SubSys_Gyro extends SubsystemBase {
     }
 
     public double getYaw() {
-        return imu.getRobotYawPitchRollAngles().getYaw(ImuConfig.IMU_ANGLE_UNIT);
+        if (imu.getRobotYawPitchRollAngles() != null) {
+            return imu.getRobotYawPitchRollAngles().getYaw(ImuConfig.IMU_ANGLE_UNIT);
+        } else return 0;
     }
 
     public double getPitch() {
-        return imu.getRobotYawPitchRollAngles().getPitch(ImuConfig.IMU_ANGLE_UNIT);
+        if (imu.getRobotYawPitchRollAngles() != null) {
+            return imu.getRobotYawPitchRollAngles().getPitch(ImuConfig.IMU_ANGLE_UNIT);
+        } else return 0;
     }
 
     public double getRoll() {
-        return imu.getRobotYawPitchRollAngles().getRoll(ImuConfig.IMU_ANGLE_UNIT);
+        if (imu.getRobotYawPitchRollAngles() != null) {
+            return imu.getRobotYawPitchRollAngles().getRoll(ImuConfig.IMU_ANGLE_UNIT);
+        } else return 0;
     }
 
     @Override
