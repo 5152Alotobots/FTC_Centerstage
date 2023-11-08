@@ -4,11 +4,11 @@ import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.commandGroups.CmdGrpPar_ArmPosIntake;
-import org.firstinspires.ftc.teamcode.commandGroups.CmdGrpPar_ArmPosLow;
+import org.firstinspires.ftc.teamcode.commandGroups.teleop.CmdGrpParallel_ArmPosIntake;
+import org.firstinspires.ftc.teamcode.commandGroups.teleop.CmdGrpParallel_ArmPosLow;
+import org.firstinspires.ftc.teamcode.commandGroups.teleop.CmdGrpParallel_ArmPosMid;
 import org.firstinspires.ftc.teamcode.subsystem.arm.SubSys_Arm;
 import org.firstinspires.ftc.teamcode.subsystem.arm.commands.Cmd_SubSys_Arm_JoystickDefault;
-import org.firstinspires.ftc.teamcode.subsystem.arm.commands.Cmd_SubSys_Arm_RotateAndExtend;
 import org.firstinspires.ftc.teamcode.subsystem.drive.SubSys_Drive;
 import org.firstinspires.ftc.teamcode.subsystem.drive.commands.Cmd_SubSys_Drive_JoystickDefault;
 import org.firstinspires.ftc.teamcode.subsystem.driverstation.SubSys_DriverStation;
@@ -36,7 +36,7 @@ public class Teleop extends CommandOpMode
         SubSys_Gyro subSysGyro = new SubSys_Gyro(hardwareMap);
         SubSys_Drive subSysDrive = new SubSys_Drive(subSysGyro, hardwareMap);
         SubSys_Arm subSysArm = new SubSys_Arm(hardwareMap);
-        SubSys_Hand subSysHand = new SubSys_Hand(hardwareMap);
+        SubSys_Hand subSysHand = new SubSys_Hand(subSysArm, hardwareMap);
         SubSys_Intake subSysIntake = new SubSys_Intake(hardwareMap);
         SubSys_Launcher subSysLauncher = new SubSys_Launcher(hardwareMap);
 
@@ -59,7 +59,7 @@ public class Teleop extends CommandOpMode
                 new Cmd_SubSys_Arm_JoystickDefault(
                         subSysArm,
                         telemetry,
-                        () -> subSysDriverStation.getCoDriverRightY(),
+                        subSysDriverStation::getCoDriverRightY,
                         subSysDriverStation::getCoDriverLeftY
                 )
         );
@@ -84,28 +84,27 @@ public class Teleop extends CommandOpMode
 
         /* Arm positions */
         subSysDriverStation.armIntakePositionButton.whenPressed(
-                new CmdGrpPar_ArmPosIntake(
+                new CmdGrpParallel_ArmPosIntake(
                         subSysArm,
                         subSysHand,
                         telemetry
                 ).withTimeout(3000)
         );
         subSysDriverStation.armLowPositionButton.whenPressed(
-                new CmdGrpPar_ArmPosLow(
+                new CmdGrpParallel_ArmPosLow(
                         subSysArm,
                         subSysHand,
                         telemetry
                 ).withTimeout(3000)
         );
         subSysDriverStation.armMidPositionButton.whenPressed(
-                new Cmd_SubSys_Arm_RotateAndExtend(
+                new CmdGrpParallel_ArmPosMid(
                         subSysArm,
-                        telemetry,
-                        () -> 45,
-                        () -> 50
+                        subSysHand,
+                        telemetry
                 ).withTimeout(3000)
         );
-        subSysDriverStation.armHighPositionButton.whenPressed(
+        /*subSysDriverStation.armHighPositionButton.whenPressed(
                 new Cmd_SubSys_Arm_RotateAndExtend(
                         subSysArm,
                         telemetry,
@@ -113,6 +112,7 @@ public class Teleop extends CommandOpMode
                         () -> 70
                 ).withTimeout(3000)
         );
+         */
 
         /* Intake default command - Use controller if input, else auto intake when at 0deg */
 

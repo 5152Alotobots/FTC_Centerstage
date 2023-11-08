@@ -5,6 +5,7 @@ import static org.firstinspires.ftc.teamcode.subsystem.drive.SubSys_Drive_Consta
 import static org.firstinspires.ftc.teamcode.subsystem.drive.SubSys_Drive_Constants.FRONT_LEFT_LOCATION;
 import static org.firstinspires.ftc.teamcode.subsystem.drive.SubSys_Drive_Constants.FRONT_RIGHT_LOCATION;
 import static org.firstinspires.ftc.teamcode.subsystem.drive.SubSys_Drive_Constants.Specs.TICKS_PER_CENTIMETER;
+import static org.firstinspires.ftc.teamcode.subsystem.drive.SubSys_Drive_Constants.Specs.TICKS_PER_INCH;
 import static org.firstinspires.ftc.teamcode.subsystem.drive.SubSys_Drive_Constants.Tuning;
 import static org.firstinspires.ftc.teamcode.subsystem.drive.SubSys_Drive_Constants.startPose;
 
@@ -49,6 +50,9 @@ public class SubSys_Drive extends SubsystemBase
 
         // Invert motor
         m_frontRightMotor.setInverted(true);
+        //m_rearRightMotor.setInverted(false);
+        //m_frontLeftMotor.setInverted(true);
+        //m_rearLeftMotor.setInverted(true); //! WORKS BUT AXIS BAD
 
         // Create gyrosubsys
         this.gyroSubSys = gyroSubSys;
@@ -75,16 +79,32 @@ public class SubSys_Drive extends SubsystemBase
                 );
     }
 
+    /**
+     * @param ticks The number of ticks measured from the drive motors
+     * @return Centimeters
+     * @deprecated Use ticksToInches as field layout is in inches
+     * */
     public double ticksToCentimeters(double ticks) {
         return (ticks / TICKS_PER_CENTIMETER);
     }
+
+    /**
+     * Gets the wheel speeds from the drive
+     * @return The wheel speeds in inches per second
+     * */
     public MecanumDriveWheelSpeeds getWheelSpeeds() {
         return new MecanumDriveWheelSpeeds(
-                ticksToCentimeters(m_frontLeftMotor.getRate()), ticksToCentimeters(m_frontRightMotor.getRate()),
-                ticksToCentimeters(m_rearLeftMotor.getRate()), ticksToCentimeters(m_rearRightMotor.getRate())
+                ticksToInches(m_frontLeftMotor.getRate()), ticksToInches(m_frontRightMotor.getRate()),
+                ticksToInches(m_rearLeftMotor.getRate()), ticksToInches(m_rearRightMotor.getRate())
         );
 
+
     }
+
+    public double ticksToInches(double ticks) {
+        return (ticks / TICKS_PER_INCH);
+    }
+
     /** Gets the encoder ticks of all wheels
      * @return Array [Front Left, Front Right, Rear Left, Rear Right]
      * */
@@ -110,15 +130,39 @@ public class SubSys_Drive extends SubsystemBase
         }
     }
 
+    /**
+     * Takes a given FTClib pose and converts it to a roadrunner pose
+     * @return Roadrunner pose
+     * */
+    public com.acmerobotics.roadrunner.geometry.Pose2d convertPose(Pose2d ftclibPose) {
+        return new com.acmerobotics.roadrunner.geometry.Pose2d(
+                ftclibPose.getX(),
+                ftclibPose.getY(),
+                ftclibPose.getHeading()
+        );
+    }
+
+    /**
+     * Takes a given Roadrunner pose and converts it to a FTClib pose
+     * @return FTClib pose
+     * */
+    public Pose2d convertPose(com.acmerobotics.roadrunner.geometry.Pose2d roadrunnerPose) {
+        return new Pose2d(
+                roadrunnerPose.getX(),
+                roadrunnerPose.getY(),
+                new Rotation2d(roadrunnerPose.getHeading())
+        );
+    }
+
     @Override
     public void periodic() {
         // Get gyro angle and update the pose of the robot
         Rotation2d gyroAngle = Rotation2d.fromDegrees(gyroSubSys.getYaw());
-        currentPose = m_odometry.updateWithTime(time.seconds(), gyroAngle, getWheelSpeeds());
+        SubSys_Drive_GlobalPoseStorage.currentPose = m_odometry.updateWithTime(time.seconds(), gyroAngle, getWheelSpeeds());
     }
 
     public Pose2d getPose() {
-        return currentPose;
+        return SubSys_Drive_GlobalPoseStorage.currentPose;
     }
 }
 

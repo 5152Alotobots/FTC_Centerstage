@@ -25,8 +25,12 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.teamcode.subsystem.arm.SubSys_Arm;
+
 public class SubSys_Hand extends SubsystemBase
 {
+    private SubSys_Arm subSysArm;
+
     private Motor wristMotor;
     private ColorSensor leftColor;
     private ColorSensor rightColor;
@@ -41,7 +45,8 @@ public class SubSys_Hand extends SubsystemBase
     private boolean rightFrontOpen;
     private boolean rightBackOpen;
 
-    public SubSys_Hand(HardwareMap hwMap) {
+    public SubSys_Hand(SubSys_Arm subSysArm, HardwareMap hwMap) {
+        this.subSysArm = subSysArm;
        wristMotor = new Motor(hwMap, WRIST);
        leftGate = hwMap.get(Servo.class, LEFT_FRONT_SERVO);
        leftDrop = hwMap.get(Servo.class, LEFT_BACK_SERVO);
@@ -171,6 +176,12 @@ public class SubSys_Hand extends SubsystemBase
         }
 
     }
+    /**
+     * Resets the encoder in the wrist to 0
+     * */
+    public void resetRotationPosition() {
+        wristMotor.resetEncoder();
+    }
 
     public boolean isLeftOccupied() {
         throw new UnsupportedOperationException(); // Not implemented
@@ -182,6 +193,9 @@ public class SubSys_Hand extends SubsystemBase
 
     @Override
     public void periodic() {
+        if (subSysArm.rotateAtFrontLimit()) {
+            resetRotationPosition();
+        }
     }
 
 }

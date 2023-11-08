@@ -32,7 +32,7 @@ public class SubSys_Hand_Constants
 
         public static final double OPEN_LEFT_FRONT_POS = -1;
         public static final double OPEN_LEFT_BACK_POS = 1;
-        public static final double OPEN_RIGHT_FRONT_POS = -1;
+        public static final double OPEN_RIGHT_FRONT_POS = -0.7;
         public static final double OPEN_RIGHT_BACK_POS = 1;
     }
 

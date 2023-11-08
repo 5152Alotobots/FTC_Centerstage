@@ -12,12 +12,20 @@ public class SubSys_DriverStation extends SubsystemBase
     private GamepadEx driverController;
     private GamepadEx coDriverController;
     /* Buttons */
+
     // Driver
+    /* ----- TELEOP ----- */
     public final GamepadButton resetGyroButton;
     public final GamepadButton armLauncherButton;
     public final GamepadButton fireLauncherButton;
+    /* ----- AUTO ----- */
+    public final GamepadButton redSideButton;
+    public final GamepadButton blueSideButton;
+    public final GamepadButton leftButton;
+    public final GamepadButton rightButton;
 
     // CoDriver
+    /* ----- TELEOP ----- */
     public final GamepadButton armIntakePositionButton;
     public final GamepadButton armLowPositionButton;
     public final GamepadButton armMidPositionButton;
@@ -32,9 +40,16 @@ public class SubSys_DriverStation extends SubsystemBase
         /* Driver controller */
         GamepadEx driverController = new GamepadEx(gamepad1);
         this.driverController = driverController;
+
+        /* ----- TELEOP ----- */
         resetGyroButton = new GamepadButton(driverController, GamepadKeys.Button.A);
         armLauncherButton = new GamepadButton(driverController, GamepadKeys.Button.DPAD_DOWN);
         fireLauncherButton = new GamepadButton(driverController, GamepadKeys.Button.DPAD_UP);
+        /* ----- AUTO ----- */
+        redSideButton = new GamepadButton(driverController, GamepadKeys.Button.B);
+        blueSideButton = new GamepadButton(driverController, GamepadKeys.Button.X);
+        leftButton = new GamepadButton(driverController, GamepadKeys.Button.BACK);
+        rightButton = new GamepadButton(driverController, GamepadKeys.Button.START);
 
         /* CoDriver controller */
         GamepadEx coDriverController = new GamepadEx(gamepad2);

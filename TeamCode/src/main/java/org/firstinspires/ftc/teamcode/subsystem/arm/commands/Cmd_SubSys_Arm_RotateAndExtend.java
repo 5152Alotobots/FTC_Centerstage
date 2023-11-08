@@ -43,7 +43,7 @@ public class Cmd_SubSys_Arm_RotateAndExtend extends CommandBase
 
         // Create new PIDF controller with values in SubSys_Arm_Constants
         extPid = new PIDFController(ExtensionPIDF.kP, ExtensionPIDF.kI, ExtensionPIDF.kD, ExtensionPIDF.kF);
-        extPid.setTolerance(0.5); // Centimeters
+        extPid.setTolerance(0.2); // Centimeters
     }
 
     // Called once the command ends or is interrupted.
