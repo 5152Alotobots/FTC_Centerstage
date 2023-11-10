@@ -1,7 +1,9 @@
 package org.firstinspires.ftc.teamcode.subsystem.drive.commands;
 
 import com.arcrobotics.ftclib.command.CommandBase;
+import com.arcrobotics.ftclib.kinematics.wpilibkinematics.MecanumDriveWheelSpeeds;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.subsystem.drive.SubSys_Drive;
 
 import java.util.function.BooleanSupplier;
@@ -11,6 +13,7 @@ public class Cmd_SubSys_Drive_JoystickDefault extends CommandBase
 {
     @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
     private final SubSys_Drive subSysDrive;
+    private final Telemetry telemetry;
 
     private final DoubleSupplier xCmd;
     private final DoubleSupplier yCmd;
@@ -19,12 +22,14 @@ public class Cmd_SubSys_Drive_JoystickDefault extends CommandBase
 
     public Cmd_SubSys_Drive_JoystickDefault(
             SubSys_Drive subSysDrive,
+            Telemetry telemetry,
             DoubleSupplier xCmd,
             DoubleSupplier yCmd,
             DoubleSupplier rotCmd,
             BooleanSupplier fieldOriented) {
 
         this.subSysDrive = subSysDrive;
+        this.telemetry = telemetry;
         this.xCmd = xCmd;
         this.yCmd = yCmd;
         this.rotCmd = rotCmd;
@@ -46,6 +51,16 @@ public class Cmd_SubSys_Drive_JoystickDefault extends CommandBase
                 rotCmd.getAsDouble(),
                 fieldOriented.getAsBoolean()
         );
+
+        telemetry.addData("POSE XY: ", subSysDrive.getPose().getX() + "," + subSysDrive.getPose().getY());
+        telemetry.addData("COMMAND X: ", xCmd.getAsDouble());
+        telemetry.addData("COMMAND Y: ", yCmd.getAsDouble());
+        telemetry.addData("COMMAND ROT: ", rotCmd.getAsDouble());
+        telemetry.addLine("---");
+        MecanumDriveWheelSpeeds wheelSpeeds = subSysDrive.getWheelSpeeds();
+        telemetry.addData("WHEEL SPEEDS: FL,FR,RL,RR", wheelSpeeds.frontLeftMetersPerSecond +","+wheelSpeeds.frontRightMetersPerSecond+","+wheelSpeeds.rearLeftMetersPerSecond+","+wheelSpeeds.rearRightMetersPerSecond);
+        telemetry.addData("ENCODER TICKS RR:", subSysDrive.getEncoderTicks()[3]);
+
     }
 
     // Returns true when the command should end.
@@ -54,4 +69,4 @@ public class Cmd_SubSys_Drive_JoystickDefault extends CommandBase
         return false;
     }
 }
-}
+
