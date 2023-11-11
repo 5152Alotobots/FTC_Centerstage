@@ -58,7 +58,7 @@ public class SubSys_Drive extends SubsystemBase
         this.gyroSubSys = gyroSubSys;
 
         // Set max speed
-        m_mecanum.setMaxSpeed(Tuning.MAX_SPD);
+        m_mecanum.setMaxSpeed(Tuning.MAX_SPEED);
 
         // Start timer for pose calculations
         time = new ElapsedTime();

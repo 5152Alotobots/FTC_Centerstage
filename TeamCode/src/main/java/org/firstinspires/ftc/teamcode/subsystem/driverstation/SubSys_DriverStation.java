@@ -45,6 +45,7 @@ public class SubSys_DriverStation extends SubsystemBase
         resetGyroButton = new GamepadButton(driverController, GamepadKeys.Button.A);
         armLauncherButton = new GamepadButton(driverController, GamepadKeys.Button.DPAD_DOWN);
         fireLauncherButton = new GamepadButton(driverController, GamepadKeys.Button.DPAD_UP);
+
         /* ----- AUTO ----- */
         redSideButton = new GamepadButton(driverController, GamepadKeys.Button.B);
         blueSideButton = new GamepadButton(driverController, GamepadKeys.Button.X);
