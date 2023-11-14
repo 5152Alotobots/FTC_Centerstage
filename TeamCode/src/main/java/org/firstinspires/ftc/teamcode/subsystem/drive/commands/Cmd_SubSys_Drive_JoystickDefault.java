@@ -98,8 +98,7 @@ public class Cmd_SubSys_Drive_JoystickDefault extends CommandBase
         telemetry.addLine("---");
         MecanumDriveWheelSpeeds wheelSpeeds = subSysDrive.getWheelSpeeds();
         telemetry.addData("WHEEL SPEEDS: FL,FR,RL,RR", wheelSpeeds.frontLeftMetersPerSecond +","+wheelSpeeds.frontRightMetersPerSecond+","+wheelSpeeds.rearLeftMetersPerSecond+","+wheelSpeeds.rearRightMetersPerSecond);
-        telemetry.addData("ENCODER TICKS RR:", subSysDrive.getEncoderTicks()[3]);
-
+        telemetry.addData("ENCODER TICKS:", subSysDrive.getEncoderTicks()[0]+","+subSysDrive.getEncoderTicks()[1]+","+subSysDrive.getEncoderTicks()[2]+","+subSysDrive.getEncoderTicks()[3]);
     }
 
     // Returns true when the command should end.

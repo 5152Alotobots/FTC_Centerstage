@@ -1,22 +1,22 @@
 package org.firstinspires.ftc.teamcode.subsystem.roadrunner.commands;
 //package org.firstinspires.ftc.teamcode.subsystem.drive.commands;
 
- import com.acmerobotics.roadrunner.geometry.Pose2d;
- import com.acmerobotics.roadrunner.trajectory.Trajectory;
- import com.arcrobotics.ftclib.command.CommandBase;
+import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.arcrobotics.ftclib.command.CommandBase;
 
- import org.firstinspires.ftc.robotcore.external.Telemetry;
- import org.firstinspires.ftc.teamcode.subsystem.drive.SubSys_Drive;
- import org.firstinspires.ftc.teamcode.subsystem.drive.SubSys_Drive_GlobalPoseStorage;
- import org.firstinspires.ftc.teamcode.subsystem.roadrunner.SubSys_RoadRunner;
- import org.firstinspires.ftc.teamcode.subsystem.gyro.SubSys_Gyro;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.subsystem.drive.SubSys_Drive;
+import org.firstinspires.ftc.teamcode.subsystem.drive.SubSys_Drive_GlobalPoseStorage;
+import org.firstinspires.ftc.teamcode.subsystem.gyro.SubSys_Gyro;
+import org.firstinspires.ftc.teamcode.subsystem.roadrunner.SubSys_RoadRunner;
+import org.firstinspires.ftc.teamcode.subsystem.roadrunner.trajectorysequence.TrajectorySequence;
 
- public class Cmd_SubSys_Drive_FollowRoadrunnerTraj extends CommandBase
+public class Cmd_SubSys_Drive_FollowRoadrunnerTraj extends CommandBase
  {
      private SubSys_Drive subSysDrive;
      private SubSys_RoadRunner subSysRoadRunner;
      private SubSys_Gyro subSysGyro;
-     private Trajectory trajectory;
+     private TrajectorySequence trajectorySequence;
      private Telemetry telemetry;
      private Pose2d currentPose;
 
@@ -25,13 +25,13 @@ package org.firstinspires.ftc.teamcode.subsystem.roadrunner.commands;
              SubSys_RoadRunner subSysRoadRunner,
              SubSys_Gyro subSysGyro,
              Telemetry telemetry,
-             Trajectory trajectory) {
+             TrajectorySequence trajectorySequence) {
 
          this.subSysDrive = subSysDrive;
          this.subSysRoadRunner = subSysRoadRunner;
          this.subSysGyro = subSysGyro;
          this.telemetry = telemetry;
-         this.trajectory = trajectory;
+         this.trajectorySequence = trajectorySequence;
 
          // Don't add roadrunner subsystem as it isn't REALLY a subsystem.
          addRequirements(subSysDrive, subSysGyro);
@@ -44,7 +44,7 @@ package org.firstinspires.ftc.teamcode.subsystem.roadrunner.commands;
      public void initialize() {
          currentPose = subSysDrive.convertPose(SubSys_Drive_GlobalPoseStorage.currentPose);
          subSysRoadRunner.setPoseEstimate(currentPose);
-         subSysRoadRunner.followTrajectory(trajectory);
+         subSysRoadRunner.followTrajectorySequence(trajectorySequence);
      }
 
      /**

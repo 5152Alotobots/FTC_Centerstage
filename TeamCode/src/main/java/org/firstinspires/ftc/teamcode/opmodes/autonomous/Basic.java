@@ -39,7 +39,7 @@ public class Basic extends CommandOpMode
     private final SubSys_Hand subSysHand = new SubSys_Hand(subSysArm, hardwareMap);
     private final SubSys_Intake subSysIntake = new SubSys_Intake(hardwareMap);
     private final SubSys_Launcher subSysLauncher = new SubSys_Launcher(hardwareMap);
-    private final AutoCommands_Basic autoCommandsBasic = new AutoCommands_Basic(subSysDrive, telemetry);
+    private final AutoCommands_Basic autoCommands = new AutoCommands_Basic(subSysDrive, telemetry);
 
     // subSysApriltag = new SubSys_Apriltag();
     // subSysTensorflow = new SubSys_Tensorflow();
@@ -96,10 +96,10 @@ public class Basic extends CommandOpMode
 
         SelectCommand autoCommand = new SelectCommand(
                 new HashMap<Object, Command>() {{
-                    put(START_POS.RED_LEFT, autoCommandsBasic.new RedLeft());
-                    put(START_POS.RED_RIGHT, autoCommandsBasic.new RedRight());
-                    put(START_POS.BLUE_LEFT, autoCommandsBasic.new BlueLeft());
-                    put(START_POS.BLUE_RIGHT, autoCommandsBasic.new BlueRight());
+                    put(START_POS.RED_LEFT, autoCommands.new RedLeft());
+                    put(START_POS.RED_RIGHT, autoCommands.new RedRight());
+                    put(START_POS.BLUE_LEFT, autoCommands.new BlueLeft());
+                    put(START_POS.BLUE_RIGHT, autoCommands.new BlueRight());
                 }},
                 // Selector
                 this::startPos

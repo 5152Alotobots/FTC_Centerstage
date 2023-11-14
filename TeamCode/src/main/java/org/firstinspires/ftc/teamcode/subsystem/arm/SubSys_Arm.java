@@ -176,8 +176,10 @@ public class SubSys_Arm extends SubsystemBase
 
     @Override
     public void periodic() {
-        if (frontTouch.isPressed() && getRotationDegrees() != 0) resetRotationPosition();
-        if (inTouch.isPressed() && getExtensionCentimeters() != 0) resetExtensionPosition();
+        if (frontTouch != null) {
+            if (frontTouch.isPressed() && getRotationDegrees() != 0) resetRotationPosition();
+            if (inTouch.isPressed() && getExtensionCentimeters() != 0) resetExtensionPosition();
+        }
     }
 
 }

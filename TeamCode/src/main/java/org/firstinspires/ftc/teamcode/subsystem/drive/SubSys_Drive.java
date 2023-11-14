@@ -46,13 +46,13 @@ public class SubSys_Drive extends SubsystemBase
         m_rearRightMotor = new Motor(hwMap, MotorIds.BACK_RIGHT);
 
         // Create MecanumDrive
-        m_mecanum = new MecanumDrive(m_frontLeftMotor, m_frontRightMotor, m_rearLeftMotor, m_rearRightMotor);
+        m_mecanum = new MecanumDrive(false, m_frontLeftMotor, m_frontRightMotor, m_rearLeftMotor, m_rearRightMotor);
 
         // Invert motor
         m_frontRightMotor.setInverted(true);
         //m_rearRightMotor.setInverted(false);
         //m_frontLeftMotor.setInverted(true);
-        //m_rearLeftMotor.setInverted(true); //! WORKS BUT AXIS BAD
+        m_rearLeftMotor.setInverted(true); //! WORKS BUT AXIS BAD
 
         // Create gyrosubsys
         this.gyroSubSys = gyroSubSys;
