@@ -25,8 +25,15 @@ public class SubSys_Drive_Constants
 
     public static class Tuning
     {
-        public static final double MAX_SPD = 1.0;
-        public static final double MAX_ROT_SPD = 0.0; // NOT IMPLEMENTED
+        /** Sets the absolute max speed of the drive system*/
+        public static final double MAX_SPEED = 1.0;
+
+        /** Sets the slow mode speed of the drive system*/
+        public static final double SLOW_SPEED = 0.3;
+        /** Sets the default speed of the drive system*/
+        public static final double DEFAULT_SPEED = 0.7;
+        /** Sets the turbo speed of the drive system*/
+        public static final double TURBO_SPEED = 1.0;
     }
 
     public static class Specs

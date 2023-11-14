@@ -33,8 +33,8 @@ public class CmdGrpParallel_ArmPosIntake extends ParallelCommandGroup
                 ),
                 new InstantCommand(
                         () -> {
-                            subSysHand.toggleLeftFront();
-                            subSysHand.toggleRightFront();
+                            subSysHand.openLeftBack(false);
+                            subSysHand.openRightBack(false);
                         }
                 )
         );
