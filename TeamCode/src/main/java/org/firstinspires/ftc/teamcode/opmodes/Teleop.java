@@ -50,12 +50,12 @@ public class Teleop extends CommandOpMode
                 new Cmd_SubSys_Drive_JoystickDefault(
                         subSysDrive,
                         telemetry,
-                        () -> -subSysDriverStation.getDriverLeftX(),
+                        subSysDriverStation::getDriverLeftX,
                         subSysDriverStation::getDriverLeftY,
                         subSysDriverStation::getDriverRightX,
                         () -> false,
-                        () -> subSysDriverStation.getCoDriverLeftTrigger() > 0.3,
-                        () -> subSysDriverStation.getCoDriverRightTrigger() > 0.3
+                        subSysDriverStation::isDriverLeftTriggerDown,
+                        subSysDriverStation::isDriverRightTriggerDown
                 ));
         subSysArm.setDefaultCommand(
                 new Cmd_SubSys_Arm_JoystickDefault(

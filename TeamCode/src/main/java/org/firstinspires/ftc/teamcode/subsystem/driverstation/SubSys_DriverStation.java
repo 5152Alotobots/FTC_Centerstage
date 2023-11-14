@@ -84,7 +84,12 @@ public class SubSys_DriverStation extends SubsystemBase
     public double getDriverRightTrigger() {
         return driverController.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER);
     }
-
+    public boolean isDriverLeftTriggerDown() {
+        return driverController.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.3;
+    }
+    public boolean isDriverRightTriggerDown() {
+        return driverController.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.3;
+    }
 
     /* CoDriver controller */
     public double getCoDriverLeftX() {
@@ -133,6 +138,7 @@ public class SubSys_DriverStation extends SubsystemBase
     public double getCoDriverRightTrigger() {
         return  coDriverController.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER);
     }
+
 
     @Override
     public void periodic() {
