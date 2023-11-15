@@ -15,20 +15,15 @@ import com.arcrobotics.ftclib.command.SubsystemBase;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
-import org.firstinspires.ftc.vision.apriltag.AprilTagPoseFtc;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
-
-import java.util.List;
-
-import kotlin.text.Regex;
 
 public class SubSys_Tensorflow extends SubsystemBase
 {
     private TfodProcessor processor;
 
     public SubSys_Tensorflow() {
+
         // Create new Tfod processor (ADVANCED)
-        /*
         processor = new TfodProcessor.Builder()
                 .setMaxNumRecognitions(SubSys_Tensorflow_Constants.ProcessorOptions.MAX_RECOGNITIONS)
                 .setUseObjectTracker(SubSys_Tensorflow_Constants.ProcessorOptions.USE_OBJECT_TRACKER)
@@ -39,12 +34,14 @@ public class SubSys_Tensorflow extends SubsystemBase
                 .setModelAssetName(SubSys_Tensorflow_Constants.ASSET_NAME)
                 .setModelLabels(SubSys_Tensorflow_Constants.MODEL_LABELS)
                 .build();
-         */
+
 
         // Create new Tfod processor (TESTING ONLY, TRAIN CUSTOM ASAP)
+/*
         processor = new TfodProcessor.Builder()
-                .setTrackerMinCorrelation(0.3f)
+                .setTrackerMinCorrelation(0.8f)
                 .build();
+                */
     }
 
     @Override

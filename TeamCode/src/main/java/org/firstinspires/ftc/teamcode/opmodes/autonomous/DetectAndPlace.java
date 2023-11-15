@@ -1,15 +1,11 @@
 package org.firstinspires.ftc.teamcode.opmodes.autonomous;
 
 import com.arcrobotics.ftclib.command.CommandOpMode;
-import com.arcrobotics.ftclib.geometry.Pose2d;
-import com.arcrobotics.ftclib.geometry.Rotation2d;
-import com.arcrobotics.ftclib.geometry.Translation2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.commandGroups.autonomous.red.CmdGrpSequential_RedLeft;
 import org.firstinspires.ftc.teamcode.subsystem.arm.SubSys_Arm;
 import org.firstinspires.ftc.teamcode.subsystem.drive.SubSys_Drive;
-import org.firstinspires.ftc.teamcode.subsystem.drive.SubSys_Drive_GlobalPoseStorage;
 import org.firstinspires.ftc.teamcode.subsystem.driverstation.SubSys_DriverStation;
 import org.firstinspires.ftc.teamcode.subsystem.gyro.SubSys_Gyro;
 import org.firstinspires.ftc.teamcode.subsystem.hand.SubSys_Hand;
@@ -44,7 +40,6 @@ public class DetectAndPlace extends CommandOpMode
         SubSys_Hand subSysHand = new SubSys_Hand(subSysArm, hardwareMap);
         SubSys_Intake subSysIntake = new SubSys_Intake(hardwareMap);
         SubSys_Launcher subSysLauncher = new SubSys_Launcher(hardwareMap);
-        SubSys_Drive_GlobalPoseStorage.currentPose = new Pose2d(new Translation2d(60, 12), new Rotation2d(Math.toRadians(180)));
         this.cmdGrpSequentialRedLeft =
                 new CmdGrpSequential_RedLeft(
                 subSysDrive,

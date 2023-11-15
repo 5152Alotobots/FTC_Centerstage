@@ -4,7 +4,9 @@ import static org.firstinspires.ftc.teamcode.subsystem.visionportal.tensorflow.S
 
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.controller.PIDFController;
+import com.arcrobotics.ftclib.util.MathUtils;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.teamcode.subsystem.drive.SubSys_Drive;
@@ -19,6 +21,7 @@ public class Cmd_SubSys_Drive_JoystickRotateAroundRecognition extends CommandBas
     @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
     private final SubSys_Drive subSysDrive;
     private final SubSys_Visionportal subSysVisionportal;
+    private final Telemetry telemetry;
     private final DoubleSupplier xCmd;
     private final DoubleSupplier yCmd;
     private final BooleanSupplier fieldOriented;
@@ -29,12 +32,14 @@ public class Cmd_SubSys_Drive_JoystickRotateAroundRecognition extends CommandBas
     public Cmd_SubSys_Drive_JoystickRotateAroundRecognition(
             SubSys_Drive subSysDrive,
             SubSys_Visionportal subSysVisionportal,
+            Telemetry telemetry,
             DoubleSupplier xCmd,
             DoubleSupplier yCmd,
             BooleanSupplier fieldOriented) {
 
         this.subSysDrive = subSysDrive;
         this.subSysVisionportal =subSysVisionportal;
+        this.telemetry = telemetry;
         this.xCmd = xCmd;
         this.yCmd = yCmd;
         this.fieldOriented = fieldOriented;
@@ -62,12 +67,16 @@ public class Cmd_SubSys_Drive_JoystickRotateAroundRecognition extends CommandBas
         // Calculate the rotation value
         if (bestRecognition != null && !rotPid.atSetPoint()) {
             rotCmd = rotPid.calculate(0, bestRecognition.estimateAngleToObject(AngleUnit.DEGREES));
+            rotCmd = MathUtils.clamp(rotCmd, -0.4, 0.4);
+            telemetry.addData("Objects Detected: ", subSysVisionportal.subSysTensorflow.getProcessor().getRecognitions().size());
+            telemetry.addData("Position (degrees relative) ", bestRecognition.estimateAngleToObject(AngleUnit.DEGREES));
+            telemetry.addData("Center X/Y", subSysVisionportal.subSysTensorflow.getCenter(bestRecognition)[0]+" / "+subSysVisionportal.subSysTensorflow.getCenter(bestRecognition)[1]);
         }
 
         subSysDrive.drive(
                 xCmd.getAsDouble(),
                 yCmd.getAsDouble(),
-                rotCmd*0.4,
+                rotCmd,
                 fieldOriented.getAsBoolean()
         );
 

@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.commandGroups.autonomous.red;
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
@@ -13,7 +14,8 @@ import org.firstinspires.ftc.teamcode.subsystem.hand.SubSys_Hand;
 import org.firstinspires.ftc.teamcode.subsystem.hand.commands.Cmd_SubSys_Hand_RotateWristToPosition;
 import org.firstinspires.ftc.teamcode.subsystem.intake.SubSys_Intake;
 import org.firstinspires.ftc.teamcode.subsystem.roadrunner.SubSys_RoadRunner;
-import org.firstinspires.ftc.teamcode.subsystem.roadrunner.commands.Cmd_SubSys_Drive_FollowRoadrunnerTraj;
+import org.firstinspires.ftc.teamcode.subsystem.roadrunner.commands.Cmd_SubSys_RoadRunner_FollowTrajectory;
+import org.firstinspires.ftc.teamcode.subsystem.roadrunner.commands.Cmd_SubSys_RoadRunner_SetStartPose;
 import org.firstinspires.ftc.teamcode.trajectories.testTraj;
 
 public class CmdGrpSequential_RedLeft  extends SequentialCommandGroup
@@ -35,8 +37,10 @@ public class CmdGrpSequential_RedLeft  extends SequentialCommandGroup
             SubSys_Hand subSysHand,
             Telemetry telemetry) {
 
+
         addCommands(
-                new Cmd_SubSys_Drive_FollowRoadrunnerTraj(subSysDrive, subSysRoadRunner, subSysGyro, telemetry, testTraj.testTraj(subSysRoadRunner)),
+                new Cmd_SubSys_RoadRunner_SetStartPose(subSysRoadRunner, new Pose2d(60.98, 12.79, Math.toRadians(180.00))),
+                new Cmd_SubSys_RoadRunner_FollowTrajectory(subSysDrive, subSysRoadRunner, subSysGyro, telemetry, testTraj.testTraj(subSysRoadRunner)),
                 new ParallelCommandGroup(
                         new Cmd_SubSys_Arm_RotateAndExtend(
                                 subSysArm,

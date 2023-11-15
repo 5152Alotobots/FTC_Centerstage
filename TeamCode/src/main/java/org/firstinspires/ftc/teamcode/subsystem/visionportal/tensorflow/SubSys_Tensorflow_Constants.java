@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.subsystem.visionportal.tensorflow;
 
-import com.arcrobotics.ftclib.geometry.Pose2d;
 import com.arcrobotics.ftclib.geometry.Rotation2d;
 import com.arcrobotics.ftclib.geometry.Transform2d;
 import com.arcrobotics.ftclib.geometry.Translation2d;
@@ -21,8 +20,8 @@ public class SubSys_Tensorflow_Constants
         }
     }
     // Put these in main class BECAUSE JAVA 8 IS STUPID WTF DYM I CAN'T PUT A STATIC STRING LIST IN A SUBCLASS
-    public static final String ASSET_NAME = "Test"; // Name of the asset bundled into the build
-    public static final String[] MODEL_LABELS = new String[]{"A", "B", "C"}; // Labels in a String list
+    public static final String ASSET_NAME = "hand.tflite"; // Name of the asset bundled into the build
+    public static final String[] MODEL_LABELS = new String[]{"hand"}; // Labels in a String list
 
     public static final Transform2d ROBOT_TO_CAM = new Transform2d(
             new Translation2d(0,0), // 0M FORWARD of center, 0M RIGHT of center

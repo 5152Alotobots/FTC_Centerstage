@@ -9,7 +9,6 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.commandGroups.autonomous.red.CmdGrpSequential_RedLeft;
 import org.firstinspires.ftc.teamcode.subsystem.arm.SubSys_Arm;
 import org.firstinspires.ftc.teamcode.subsystem.drive.SubSys_Drive;
-import org.firstinspires.ftc.teamcode.subsystem.drive.SubSys_Drive_GlobalPoseStorage;
 import org.firstinspires.ftc.teamcode.subsystem.drive.commands.Cmd_SubSys_Drive_MoveToPoseRelative;
 import org.firstinspires.ftc.teamcode.subsystem.gyro.SubSys_Gyro;
 import org.firstinspires.ftc.teamcode.subsystem.hand.SubSys_Hand;
@@ -47,7 +46,6 @@ public class AutoCommands_DetectAndPlace
     public class RedLeft extends SequentialCommandGroup
     {
         public RedLeft() {
-            SubSys_Drive_GlobalPoseStorage.currentPose = new Pose2d(new Translation2d(60.56, 12.79), new Rotation2d(Math.toRadians(179.06)));
             addCommands(
                     new CmdGrpSequential_RedLeft(
                             subSysDrive,

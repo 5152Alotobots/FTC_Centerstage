@@ -73,10 +73,9 @@ public class SubSys_Drive extends SubsystemBase
 
         m_odometry = new MecanumDriveOdometry
                 (
-                        m_kinematics, new Rotation2d(gyroSubSys.getYaw()),
-                        new Pose2d(0.0, 0.0, new Rotation2d()
-                        )
-                );
+                        m_kinematics, new Rotation2d(Math.toRadians(gyroSubSys.getYaw())),
+                        convertPose(SubSys_Drive_GlobalPoseStorage.currentPose)
+                        );
     }
 
     /**
@@ -157,11 +156,11 @@ public class SubSys_Drive extends SubsystemBase
     @Override
     public void periodic() {
         // Get gyro angle and update the pose of the robot
-        Rotation2d gyroAngle = Rotation2d.fromDegrees(gyroSubSys.getYaw());
-        SubSys_Drive_GlobalPoseStorage.currentPose = m_odometry.updateWithTime(time.seconds(), gyroAngle, getWheelSpeeds());
+        Rotation2d gyroAngle = new Rotation2d(Math.toRadians(gyroSubSys.getYaw()));
+        SubSys_Drive_GlobalPoseStorage.currentPose = convertPose(m_odometry.updateWithTime(time.seconds(), gyroAngle, getWheelSpeeds()));
     }
 
-    public Pose2d getPose() {
+    public com.acmerobotics.roadrunner.geometry.Pose2d getPose() {
         return SubSys_Drive_GlobalPoseStorage.currentPose;
     }
 }
