@@ -18,6 +18,8 @@ import org.firstinspires.ftc.teamcode.subsystem.hand.commands.Cmd_SubSys_Hand_Jo
 import org.firstinspires.ftc.teamcode.subsystem.intake.SubSys_Intake;
 import org.firstinspires.ftc.teamcode.subsystem.intake.commands.Cmd_SubSys_Intake_JoystickDefault;
 import org.firstinspires.ftc.teamcode.subsystem.launcher.SubSys_Launcher;
+import org.firstinspires.ftc.teamcode.subsystem.markerdetection.SubSys_MarkerDetection;
+import org.firstinspires.ftc.teamcode.subsystem.markerdetection.commands.Cmd_SubSys_MarkerDetection_Test;
 import org.firstinspires.ftc.teamcode.subsystem.visionportal.SubSys_Visionportal;
 import org.firstinspires.ftc.teamcode.subsystem.visionportal.apriltag.SubSys_Apriltag;
 import org.firstinspires.ftc.teamcode.subsystem.visionportal.tensorflow.SubSys_Tensorflow;
@@ -25,6 +27,7 @@ import org.firstinspires.ftc.teamcode.subsystem.visionportal.tensorflow.SubSys_T
 @TeleOp(name="Teleop", group = "teleop")
 public class Teleop extends CommandOpMode
 {
+    private SubSys_MarkerDetection subSysMarkerDetection;
     private SubSys_Tensorflow subSysTensorflow;
     private SubSys_Apriltag subSysApriltag;
     private SubSys_Visionportal subSysVisionportal;
@@ -39,11 +42,19 @@ public class Teleop extends CommandOpMode
         SubSys_Hand subSysHand = new SubSys_Hand(subSysArm, hardwareMap);
         SubSys_Intake subSysIntake = new SubSys_Intake(hardwareMap);
         SubSys_Launcher subSysLauncher = new SubSys_Launcher(hardwareMap);
+        SubSys_MarkerDetection subSysMarkerDetection = new SubSys_MarkerDetection(hardwareMap);
 
         // subSysApriltag = new SubSys_Apriltag();
         // subSysTensorflow = new SubSys_Tensorflow();
         // subSysVisionportal = new SubSys_Visionportal(subSysTensorflow, subSysApriltag, hardwareMap);
-        register(subSysDriverStation, subSysGyro, subSysDrive, subSysArm, subSysHand, subSysIntake, subSysLauncher);
+        register(subSysDriverStation, subSysGyro, subSysDrive, subSysArm, subSysHand, subSysIntake, subSysLauncher, subSysMarkerDetection);
+
+        subSysMarkerDetection.setDefaultCommand(
+                new Cmd_SubSys_MarkerDetection_Test(
+                        subSysMarkerDetection,
+                        telemetry
+                )
+        );
 
         /* Default commands */
         subSysDrive.setDefaultCommand(
@@ -161,6 +172,7 @@ public class Teleop extends CommandOpMode
         while (!isStopRequested() && opModeIsActive()) {
             run();
             telemetry.update();
+
         }
         reset();
     }

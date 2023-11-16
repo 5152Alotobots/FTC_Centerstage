@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.opmodes.autonomous;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.firstinspires.ftc.teamcode.commandGroups.autonomous.red.CmdGrpSequential_RedLeft;
+import org.firstinspires.ftc.teamcode.commandGroups.autonomous.CmdGrpSequential_DetectPlacePark;
 import org.firstinspires.ftc.teamcode.subsystem.arm.SubSys_Arm;
 import org.firstinspires.ftc.teamcode.subsystem.drive.SubSys_Drive;
 import org.firstinspires.ftc.teamcode.subsystem.driverstation.SubSys_DriverStation;
@@ -11,10 +11,11 @@ import org.firstinspires.ftc.teamcode.subsystem.gyro.SubSys_Gyro;
 import org.firstinspires.ftc.teamcode.subsystem.hand.SubSys_Hand;
 import org.firstinspires.ftc.teamcode.subsystem.intake.SubSys_Intake;
 import org.firstinspires.ftc.teamcode.subsystem.launcher.SubSys_Launcher;
+import org.firstinspires.ftc.teamcode.subsystem.markerdetection.SubSys_MarkerDetection;
 import org.firstinspires.ftc.teamcode.subsystem.roadrunner.SubSys_RoadRunner;
 
 @Autonomous
-public class DetectAndPlace extends CommandOpMode
+public class DetectPlacePark extends CommandOpMode
 {
     enum ALLIANCE {
         RED, BLUE
@@ -29,7 +30,7 @@ public class DetectAndPlace extends CommandOpMode
         BLUE_LEFT, BLUE_RIGHT
     }
 
-    private CmdGrpSequential_RedLeft cmdGrpSequentialRedLeft;
+    private CmdGrpSequential_DetectPlacePark cmdGrpSequentialDetectPlacePark;
     @Override
     public void initialize() {
         SubSys_DriverStation subSysDriverStation = new SubSys_DriverStation(gamepad1, gamepad2);
@@ -40,15 +41,17 @@ public class DetectAndPlace extends CommandOpMode
         SubSys_Hand subSysHand = new SubSys_Hand(subSysArm, hardwareMap);
         SubSys_Intake subSysIntake = new SubSys_Intake(hardwareMap);
         SubSys_Launcher subSysLauncher = new SubSys_Launcher(hardwareMap);
-        this.cmdGrpSequentialRedLeft =
-                new CmdGrpSequential_RedLeft(
-                subSysDrive,
-                subSysRoadRunner,
-                subSysGyro,
-                subSysArm,
-                subSysIntake,
-                subSysHand,
-                telemetry);
+        SubSys_MarkerDetection subSysMarkerDetection = new SubSys_MarkerDetection(hardwareMap);
+        this.cmdGrpSequentialDetectPlacePark =
+                new CmdGrpSequential_DetectPlacePark(
+                        subSysDrive,
+                        subSysRoadRunner,
+                        subSysGyro,
+                        subSysArm,
+                        subSysIntake,
+                        subSysHand,
+                        subSysMarkerDetection,
+                        telemetry);
 
         // subSysApriltag = new SubSys_Apriltag();
         // subSysTensorflow = new SubSys_Tensorflow();
@@ -63,7 +66,7 @@ public class DetectAndPlace extends CommandOpMode
         initialize();
 
         waitForStart();
-        cmdGrpSequentialRedLeft.schedule();
+        cmdGrpSequentialDetectPlacePark.schedule();
         // run the scheduler, update telemetry
         while (!isStopRequested() && opModeIsActive()) {
             run();

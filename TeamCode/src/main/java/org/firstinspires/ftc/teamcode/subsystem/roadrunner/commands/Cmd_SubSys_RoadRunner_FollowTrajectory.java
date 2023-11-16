@@ -42,8 +42,8 @@ public class Cmd_SubSys_RoadRunner_FollowTrajectory extends CommandBase
       */
      @Override
      public void initialize() {
-         currentPose = SubSys_Drive_GlobalPoseStorage.currentPose;
-         subSysRoadRunner.setPoseEstimate(currentPose);
+         // currentPose = SubSys_Drive_GlobalPoseStorage.currentPose;
+         // subSysRoadRunner.setPoseEstimate(currentPose);
          subSysRoadRunner.followTrajectorySequence(trajectorySequence);
      }
 

@@ -23,6 +23,7 @@ public class SubSys_Tensorflow extends SubsystemBase
 
     public SubSys_Tensorflow() {
 
+        /*
         // Create new Tfod processor (ADVANCED)
         processor = new TfodProcessor.Builder()
                 .setMaxNumRecognitions(SubSys_Tensorflow_Constants.ProcessorOptions.MAX_RECOGNITIONS)
@@ -36,12 +37,15 @@ public class SubSys_Tensorflow extends SubsystemBase
                 .build();
 
 
+         */
+
         // Create new Tfod processor (TESTING ONLY, TRAIN CUSTOM ASAP)
-/*
+
         processor = new TfodProcessor.Builder()
                 .setTrackerMinCorrelation(0.8f)
+                .setIsModelTensorFlow2(false)
                 .build();
-                */
+
     }
 
     @Override

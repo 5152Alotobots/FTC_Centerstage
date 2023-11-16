@@ -18,6 +18,7 @@ public class Cmd_SubSys_RoadRunner_SetStartPose extends InstantCommand
     }
     @Override
     public void initialize() {
+        //SubSys_Drive_GlobalPoseStorage.currentPose = startPose;
         subSysRoadRunner.setPoseEstimate(startPose);
     }
 }

@@ -16,7 +16,7 @@ public class SubSys_Tensorflow_Constants
         public class Advanced
         {
             public static final boolean TENSORFLOW_2 = false; // Is the detector tf2
-            public static final boolean IS_QUANTIZED = false; // Is the model quantized
+            public static final boolean IS_QUANTIZED = true; // Is the model quantized
         }
     }
     // Put these in main class BECAUSE JAVA 8 IS STUPID WTF DYM I CAN'T PUT A STATIC STRING LIST IN A SUBCLASS
